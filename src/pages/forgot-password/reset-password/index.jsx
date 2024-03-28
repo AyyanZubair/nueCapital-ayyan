@@ -156,7 +156,7 @@ const ResetPasswordV2 = () => {
           <Box sx={{ width: '100%', maxWidth: 400 }}>
             <Image
               alt='company logo'
-              src={theme.palette.mode === 'dark' ? '/logos/logo-white.png' : '/logos/logo-black.png'}
+              src={theme.palette.mode === 'dark' ? '/portfolioImages/logo.svg' : '/portfolioImages/logo.svg'}
               width={180}
               height={180}
             />

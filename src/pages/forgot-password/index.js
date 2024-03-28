@@ -102,7 +102,7 @@ const ForgotPassword = () => {
             <Box sx={{ width: '100%', maxWidth: 400, textAlign: 'center' }}>
               <Image
                 alt='logo'
-                src={theme.palette.mode === 'dark' ? '/logos/logo-white.png' : '/logos/logo-black.png'}
+                src={theme.palette.mode === 'dark' ? '/portfolioImages/logo.svg' : '/portfolioImages/logo.svg'}
                 width={100}
                 height={100}
                 className='mb-10'

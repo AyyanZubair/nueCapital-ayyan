@@ -41,7 +41,8 @@ const AuthProvider = ({ children }) => {
         setLoading(false)
       } else {
         setLoading(false)
-        router.replace('/login')
+        
+        // router.replace('/login')
       }
     }
     initAuth()
@@ -57,7 +58,7 @@ const AuthProvider = ({ children }) => {
     )
     setUser({ email, role, id: '123', firstName: 'Taimoor', lastName: 'ali' })
 
-    role === 'admin' ? router.replace('/admin/dashboards') : router.replace('/vendor/dashboards')
+    role === 'admin' ? router.replace('/') : router.replace('/')
   }
 
   const handleLogout = () => {

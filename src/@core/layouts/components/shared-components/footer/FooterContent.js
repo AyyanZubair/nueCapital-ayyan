@@ -31,7 +31,7 @@ const FooterContent = () => {
         {`© ${new Date().getFullYear()}, Made with `}
         {`by`}
         <Typography sx={{ ml: 1 }} target='_blank' href='https://www.machknowsoft.net' component={StyledCompanyName}>
-          MachKnow Soft
+          Nue Capital
         </Typography>
       </Typography>
 

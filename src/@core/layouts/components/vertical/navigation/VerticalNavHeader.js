@@ -77,7 +77,7 @@ const VerticalNavHeader = props => {
         <LinkStyled href='/'>
           <Image
             alt='logo'
-            src={theme.palette.mode === 'dark' ? '/logos/logo-left-white.png' : '/logos/logo-left-black.png'}
+            src={theme.palette.mode === 'dark' ? '/portfolioImages/logo.svg' : '/portfolioImages/logo.svg'}
             width={70}
             height={70}
             className='my-5'

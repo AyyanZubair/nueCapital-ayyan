@@ -14,6 +14,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel from '@mui/material/FormControlLabel'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@mui/material'
+import {logo} from "../../../public/portfolioImages/logo.svg"
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -39,7 +40,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
-import login from '../../assest/images/man_2.png'
+import login from '../../../public/portfolioImages/Login Image.png'
 import Image from 'next/image'
 
 const RightWrapper = styled(Box)(({ theme }) => ({
@@ -118,21 +119,26 @@ const LoginPage = () => {
   return (
     <Box className='content-right' sx={{ backgroundColor: 'background.paper' }}>
       {!hidden ? (
-        <Box
-          sx={{
-            flex: 1,
-            display: 'flex',
-            position: 'relative',
-            alignItems: 'center',
-            borderRadius: '20px',
-            justifyContent: 'center',
-            backgroundColor: 'customColors.bodyBg',
-            margin: theme => theme.spacing(5, 0, 5, 8)
-          }}
-        >
-          <Image src={login} alt='login image' style={{ height: '93vh', objectFit: 'contain', width: '50%' }} />
+
+        // <Box
+        //   sx={{
+        //     flex: 1,
+        //     display: 'flex',
+        //     position: 'relative',
+        //     alignItems: 'center',
+        //     borderRadius: '20px',
+        //     justifyContent: 'center',
+        //     backgroundColor: 'customColors.bodyBg',
+        //     margin: theme => theme.spacing(5, 0, 5, 8)
+        //   }}
+        // >
+        <>
+          <Image src={login} alt='login image' style={{ height: '100vh', objectFit: 'contain', width: '50%' }} />
           <FooterIllustrationsV2 />
-        </Box>
+        </>
+
+        // </Box>
+
       ) : null}
       <RightWrapper>
         <Box
@@ -148,7 +154,7 @@ const LoginPage = () => {
             <Box sx={{ width: '100%', maxWidth: 400, textAlign: 'center' }}>
               <Image
                 alt='company logo'
-                src={theme.palette.mode === 'dark' ? '/logos/logo-white.png' : '/logos/logo-black.png'}
+                src={theme.palette.mode === 'dark' ? '/portfolioImages/logo.svg' : '/portfolioImages/logo.svg'}
                 width={100}
                 height={100}
                 className='mb-10'
@@ -156,7 +162,7 @@ const LoginPage = () => {
             </Box>
             <Box sx={{ mb: 2, mt: -6 }}>
               <Typography variant='h3' sx={{ mb: 1.5 }}>
-                {t('Welcome to') + ' ' + themeConfig.templateName + '!' + '👋🏻'}
+                {t('Welcome to') + ' ' + themeConfig.templateName + '!'}
               </Typography>
               <Typography sx={{ color: 'text.secondary' }}>
                 {t('Please sign-in to your account and start the adventure')}
@@ -229,7 +235,7 @@ const LoginPage = () => {
                   label={t('Remember Me')}
                   control={<Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />}
                 />
-                <Typography component={LinkStyled} href='/forgot-password'>
+                <Typography component={LinkStyled} href='/forgot-password' className='pointer' >
                   {t('Forgot Password?')}
                 </Typography>
               </Box>
@@ -245,7 +251,7 @@ const LoginPage = () => {
               </Button>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography sx={{ color: 'text.secondary', mr: 2 }}>{t('New on our platform?')}</Typography>
-                <Typography href='/register' component={LinkStyled}>
+                <Typography href='/register' component={LinkStyled} className='cursor-pointer' >
                   {t('Create an account')}
                 </Typography>
               </Box>

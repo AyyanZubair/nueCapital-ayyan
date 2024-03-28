@@ -26,7 +26,7 @@ const navigation = () => {
     },
     {
       icon: 'tabler:smart-home',
-      title: 'Dashboard',
+      title: 'lllll',
       path: '/admin/dashboards',
       role: 'admin'
     }

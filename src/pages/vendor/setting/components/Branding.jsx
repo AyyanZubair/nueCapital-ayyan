@@ -9,7 +9,7 @@ import { t } from 'i18next'
 
 export default function SitesAndRoutes() {
   const [file, setFile] = useState('')
-  const [imageUrl, setImageUrl] = useState('/logos/logo-white.png')
+  const [imageUrl, setImageUrl] = useState('/portfolioImages/logo.svg')
   const [selectedImage, setSelectedImage] = useState('')
   const [loading, setLoading] = useState(false)
 

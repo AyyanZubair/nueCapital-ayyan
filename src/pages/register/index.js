@@ -14,7 +14,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import { styled, useTheme } from '@mui/material/styles'
 import InputAdornment from '@mui/material/InputAdornment'
 import Image from 'next/image'
-import signup from '../../assest/images/man_13.png'
+import signup from '../../../public/portfolioImages/Sign up Image.png'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -130,7 +130,7 @@ const Register = () => {
             margin: theme => theme.spacing(5, 0, 5, 8)
           }}
         >
-          <Image alt='signup' src={signup} style={{ height: '93vh', objectFit: 'contain', width: '50%' }} />
+          <Image alt='signup' src={signup} style={{ height: '100vh', objectFit: 'contain', width: '100%' }} />
           <FooterIllustrationsV2 />
         </Box>
       ) : null}
@@ -148,7 +148,7 @@ const Register = () => {
             <Box sx={{ width: '100%', maxWidth: 400, textAlign: 'center', mb: 7 }}>
               <Image
                 alt='logo'
-                src={theme.palette.mode === 'dark' ? '/logos/logo-white.png' : '/logos/logo-black.png'}
+                src={theme.palette.mode === 'dark' ? '/portfolioImages/logo.svg' : '/portfolioImages/logo.svg'}
                 width={100}
                 height={100}
               />
