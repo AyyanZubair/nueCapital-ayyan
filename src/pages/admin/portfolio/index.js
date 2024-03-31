@@ -1,8 +1,17 @@
 import React from 'react'
+import PortfolioCards from './components/PortfolioCards'
+import FinancialCardsWrapper from './components/FinancialCards'
+import InsightsCardsWrapper from './components/InsightsCards'
+import TransactionTable from './components/TransactionTable'
 
 function Portfolio() {
   return (
-    <div>index</div>
+    <div>
+      <PortfolioCards/>
+      <FinancialCardsWrapper/>
+      <InsightsCardsWrapper/>
+      <TransactionTable/>
+    </div>
   )
 }
 

@@ -8,7 +8,6 @@ const Home = () => {
   const router = useRouter()
 
   useEffect(() => {
-    if (!user) return router.push('/login')
     if (user.role === 'admin') {
       router.push('/admin/dashboards')
     } else {

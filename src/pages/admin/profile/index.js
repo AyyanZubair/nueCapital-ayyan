@@ -1,8 +1,11 @@
 import React from 'react'
+import ProfileWrapper from './components/Profile'
 
 function Profile() {
   return (
-    <div>index</div>
+    <div>
+      <ProfileWrapper/>
+    </div>
   )
 }
 

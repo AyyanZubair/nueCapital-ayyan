@@ -1,12 +1,4 @@
 
-// import VisionMissionWrapper from "../warpper/text/VisionMissionWrapper";
-// import SliderCards from "../components/card/SliderCards";
-// import GetReady from "../components/text/GetReady";
-// import Services from "../components/imagegridtext/Services";
-// import RealStateImageGrid from "../components/imagegridtext/RealStateImageGrid";
-// import ReatEstateInvestGrid from "../components/imagegridtext/ReatEstateInvestGrid";
-// import RealStateText from "../components/text/RealStateText";
-
 import BlankLayout from "src/@core/layouts/BlankLayout";
 import BannerVertical from "./components/BannerVertical";
 import VisionMissionWrapper from "./components/VisionMission";
@@ -18,7 +10,6 @@ import SliderCards from "./components/SliderCards";
 import GetReady from "./components/GetReady";
 import PublicLayout from "../layout";
 
-// import OurTeamWrapper from "../warpper/Team/OurTeamWrapper";
 function Portfolio() {
   return (
     <PublicLayout>

@@ -155,12 +155,12 @@ const VerticalNavbar = () => {
           </div>
           {/* Vertical line */}
           <div className="border-l border-themeDarkGreen h-6 mx-2"></div>
-          <Link href="/auth/signin">
+          <Link href="/auth/login">
             <button className="text-themeDarkGreen font-medium text-base py-2 rounded mx-2">
               Login
             </button>
           </Link>
-          <Link href="/auth/signup">
+          <Link href="/auth/register">
             <button className="bg-themeDarkGreen  text-white font-bold py-[6px] px-4 rounded mx-2">
               SignUp
             </button>
@@ -285,12 +285,12 @@ const VerticalNavbar = () => {
             )}
             {/* Vertical line */}
           <div className="border-l border-themeDarkGreen h-6 mx-2"></div>
-          <Link href="/auth/signin">
+          <Link href="/auth/login">
             <button className="text-themeDarkGreen font-medium text-base py-2 rounded mx-2">
               Login
             </button>
           </Link>
-          <Link href="/auth/signup">
+          <Link href="/auth/register">
             <button className="bg-themeDarkGreen  text-white font-bold py-[6px] px-4 rounded mx-2">
               SignUp
             </button>

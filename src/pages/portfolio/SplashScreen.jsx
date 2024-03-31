@@ -6,15 +6,15 @@ import Image from "next/image";
 import { Box } from "@mui/material";
 
 function SplashScreen() {
-  let navigate = useRouter();
+  let router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate.push("/pages/porfolio/home");
+      router.push("/porfolio/home");
     }, 1000);
     
 return () => clearTimeout(timer);
-  }, [navigate]);
+  }, []);
 
   return (
     <Box className="flex justify-center items-center flex-column text-center bg-themeDarkGreen h-[100vh]">

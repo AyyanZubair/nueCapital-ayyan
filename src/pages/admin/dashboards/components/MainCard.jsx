@@ -27,7 +27,7 @@ return loading ? (
     <CradLoader />
   ) : (
     <Link
-      href="/page/details"
+      href="/admin/detail"
       className="grid grid-cols-1 overflow-hidden	 rounded-xl shadow-[0_0_5px] shadow-gray-300 my-2 mx-1"
     >
       <div className="overflow-hidden col-span-1  flex justify-center items-center">

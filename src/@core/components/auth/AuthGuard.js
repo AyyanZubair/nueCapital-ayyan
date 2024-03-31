@@ -16,19 +16,29 @@ const AuthGuard = props => {
       if (!router.isReady) {
         return
       }
-      if (auth.user === null && !window.localStorage.getItem('user')) {
+      if (router.pathname === '/' && !auth.user && !auth.loading) {
+        console.log('here')
+        router.push('/portfolio/home')
+      } else if (
+        auth.user === null &&
+        !auth.loading &&
+        !window.localStorage.getItem('user') &&
+        !router.pathname.includes('portfolio')
+      ) {
         if (router.asPath !== '/') {
+          console.log('here 2')
           router.replace({
             pathname: '/login',
             query: { returnUrl: router.asPath }
           })
         } else {
+          console.log('here 3')
           router.replace('/login')
         }
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.route]
+    [router.route, auth.loading]
   )
   if (auth.loading || auth.user === null) {
     return fallback

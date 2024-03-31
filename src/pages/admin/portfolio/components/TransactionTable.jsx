@@ -5,44 +5,27 @@ import { DataGrid } from '@mui/x-data-grid';
 const columns = [
 //   { field: 'id', headerName: 'ID', width: 90 },
   {
-    field: 'Type',
-    headerName: 'Type',
-    width: 150,
+    field: 'Property',
+    headerName: 'Property',
+    width: 380,
+
+    // editable: true,
+  },
+  {
+    field: 'InvestmentValue',
+    headerName: 'Investment Value',
+    width: 380,
 
     // editable: true,
   },
   {
     field: 'Status',
     headerName: 'Status',
-    width: 150,
-
-    // editable: true,
-  },
-  {
-    field: 'Date',
-    headerName: 'Date',
     type: 'number',
     width: 150,
 
     // editable: true,
   },
-  {
-    field: 'Wallet',
-    headerName: 'Wallet',
-    type: 'number',
-    width: 200,
-
-    // editable: true,
-  },
-  {
-    field: 'Amount',
-    headerName: 'Amount',
-    type: 'number',
-    width: 200,
-
-    // editable: true,
-  },
-  
 ];
 
 const rows = [
@@ -59,6 +42,7 @@ const rows = [
 function TransactionTable() {
   return (
     <div>
+        <h1 className="text-start text-black text-[24px] font-normal mb-3 mt-2">Transactions</h1>
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
         rows={rows}

@@ -41,7 +41,7 @@ const AuthProvider = ({ children }) => {
         setLoading(false)
       } else {
         setLoading(false)
-        
+
         // router.replace('/login')
       }
     }
@@ -58,14 +58,14 @@ const AuthProvider = ({ children }) => {
     )
     setUser({ email, role, id: '123', firstName: 'Taimoor', lastName: 'ali' })
 
-    role === 'admin' ? router.replace('/') : router.replace('/')
+    role === 'admin' ? router.replace('/admin/dashboards') : router.replace('/admin/dashboards')
   }
 
   const handleLogout = () => {
     // window.localStorage.clear()
     localStorage.removeItem('user')
     setUser(null)
-    router.replace('/login')
+    router.replace('/portfolio/home')
   }
 
   const values = {

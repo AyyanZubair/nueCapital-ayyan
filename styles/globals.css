@@ -36,3 +36,140 @@ code:not([class*='language-']):after {
 code[class*='language-'] {
   padding: 0;
 }
+
+@keyframes skeleton-loading {
+  0% {
+      background-position: -200px 0;
+  }
+
+  100% {
+      background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Style for the skeleton loading animation */
+.skeleton-loading {
+ 
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 250px 100%;
+  animation: skeleton-loading 2s infinite linear;
+ 
+}
+
+
+input[type="range"] {
+  -webkit-appearance: none;
+  /* Remove default styling */
+  appearance: none;
+  width: 100%;
+  /* Make it full width */
+  height: 10px;
+  /* Set the height */
+  background: #ddd;
+  /* Set the background color */
+  outline: none;
+  /* Remove the outline */
+  border-radius: 5px;
+  /* Round corners */
+}
+
+/* Styles for the track (progress bar) */
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  /* Make it full width */
+  height: 10px;
+  /* Set the height */
+  background: #4caf50;
+  /* Set the color of the track */
+  border-radius: 5px;
+  /* Round corners */
+}
+
+/* Styles for the thumb (slider handle) */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  /* Remove default styling */
+  appearance: none;
+  width: 20px;
+  /* Set the width of the thumb */
+  height: 20px;
+  /* Set the height of the thumb */
+  background: #fff;
+  /* Set the background color */
+  border: 2px solid #4caf50;
+  /* Add a border */
+  border-radius: 50%;
+  /* Circle shape */
+  cursor: pointer;
+  /* Add a cursor */
+  margin-top: -5px;
+  /* Center vertically */
+}
+
+/* Styles for Firefox */
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  /* Make it full width */
+  height: 10px;
+  /* Set the height */
+  background: #4caf50;
+  /* Set the color of the track */
+  border-radius: 5px;
+  /* Round corners */
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  /* Set the width of the thumb */
+  height: 20px;
+  /* Set the height of the thumb */
+  background: #fff;
+  /* Set the background color */
+  border: 1px solid #4caf50;
+  /* Add a border */
+  border-radius: 50%;
+  /* Circle shape */
+  cursor: pointer;
+  /* Add a cursor */
+}
+
+/* Styles for IE */
+input[type=range]::-ms-track {
+  width: 100%;
+  /* Make it full width */
+  height: 10px;
+  /* Set the height */
+  background: #4caf50;
+  /* Set the color of the track */
+  border-radius: 5px;
+  /* Round corners */
+}
+
+input[type=range]::-ms-thumb {
+  width: 20px;
+  /* Set the width of the thumb */
+  height: 20px;
+  /* Set the height of the thumb */
+  background: #fff;
+  /* Set the background color */
+  border: 1px solid #4caf50;
+  /* Add a border */
+  border-radius: 50%;
+  /* Circle shape */
+  cursor: pointer;
+  /* Add a cursor */
+}
+
+input[type=range]::-ms-fill-lower {
+  background: #4caf50;
+  /* Set the color of the track */
+  border-radius: 5px;
+  /* Round corners */
+}
+
+input[type=range]::-ms-fill-upper {
+  background: #ddd;
+  /* Set the color of the track */
+  border-radius: 5px;
+  /* Round corners */
+}
