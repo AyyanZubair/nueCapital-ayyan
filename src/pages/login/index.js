@@ -75,7 +75,7 @@ const schema = yup.object().shape({
 // todo : must be removed on production
 const defaultValues = {
   password: 'pakistan987',
-  email: 'admin@gmail.com'
+  email: 'sanaiqbal123876@gmail.com'
 }
 
 const LoginPage = () => {
@@ -251,7 +251,7 @@ const LoginPage = () => {
               </Button>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography sx={{ color: 'text.secondary', mr: 2 }}>{t('New on our platform?')}</Typography>
-                <Typography href='/register' component={LinkStyled} className='cursor-pointer' >
+                <Typography>
                   {t('Create an account')}
                 </Typography>
               </Box>

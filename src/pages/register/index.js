@@ -67,8 +67,9 @@ const Register = () => {
   const router = useRouter()
 
   const [data, setData] = useState({
-    firstName: '',
-    lastName: '',
+    fullName: '',
+    
+    // lastName: '',
     email: '',
     userName: '',
     password: '',
@@ -87,7 +88,7 @@ const Register = () => {
       setLoading(true)
 
       const res = await axios.post(
-        baseURL + '/users/users.createuseranonymouslyasync',
+        baseURL + '/accounts/user.account.createUser',
         { ...data },
         {
           headers: {
@@ -97,13 +98,14 @@ const Register = () => {
           }
         }
       )
+      console.log("register", res.data)
 
-      localStorage.setItem(
-        'userInfo',
-        JSON.stringify({ userId: res.data.data, userEmail: data.email, userPassword: data.password })
-      )
+      // localStorage.setItem(
+      //   'userInfo',
+      //   JSON.stringify({ userId: res.data.data, userEmail: data.email, userPassword: data.password })
+      // )
 
-      router.push('/enterOTP')
+      // router.push('/enterOTP')
 
       // await auth.login({email:data.email , password:data.password}, () => toast.error('Login failed'))
     } catch (error) {
