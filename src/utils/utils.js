@@ -21,12 +21,13 @@ export function checkValidation(userData, selectedRoles) {
 }
 
 export function signUpCheck(userData) {
-  if (userData.firstName.length < 3) {
+  if (userData.fullName.length < 3) {
     return 'first name should be atleast 3 characters long'
   }
-  if (userData.lastName.length < 3) {
-    return 'last name should be atleast 3 characters long'
-  }
+  
+  // if (userData.lastName.length < 3) {
+  //   return 'last name should be atleast 3 characters long'
+  // }
   if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(userData.email) === false) {
     return 'please enter a valid email'
   }

@@ -68,8 +68,6 @@ const Register = () => {
 
   const [data, setData] = useState({
     fullName: '',
-    
-    // lastName: '',
     email: '',
     userName: '',
     password: '',
@@ -181,20 +179,12 @@ const Register = () => {
                 required
                 fullWidth
                 sx={{ mb: 4 }}
-                label={t('First Name')}
+                label={t('Full Name')}
                 placeholder='john'
-                value={data.firstName}
-                onChange={e => setData(p => ({ ...p, firstName: e.target.value }))}
+                value={data.fullName}
+                onChange={e => setData(p => ({ ...p, fullName: e.target.value }))}
               />
-              <CustomTextField
-                required
-                fullWidth
-                sx={{ mb: 4 }}
-                label={t('Last Name')}
-                placeholder='doe'
-                value={data.lastName}
-                onChange={e => setData(p => ({ ...p, lastName: e.target.value }))}
-              />
+              
               <CustomTextField
                 required
                 type='email'
