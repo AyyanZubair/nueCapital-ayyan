@@ -17,6 +17,7 @@ export default function MoreImages() {
   }
 
   const location = useLocation();
+
   const link =
     location.pathname === "/user/more-images"
       ? "/user/dashboard-details"
