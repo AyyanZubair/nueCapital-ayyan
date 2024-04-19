@@ -1,16 +1,12 @@
 /* eslint-disable react/prop-types */
 import { IoShieldCheckmarkOutline } from "react-icons/io5";
-import KYCLayout from "./KYCLayout";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { IoIosArrowBack } from "react-icons/io";
+import { useRouter } from "next/router";
+import KYCLayout from "../KYCLayout";
 
 export default function KYCUploadDocuments() {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-
-  const item = data[queryParams.get("page")];
-
-  const navigate = useNavigate();
+  const router = useRouter()
+  const item = data[router.query.page];
+  
 
   return (
     <KYCLayout>
@@ -28,7 +24,7 @@ export default function KYCUploadDocuments() {
           </p>
         </div>
         <main className=" flex gap-2 flex-col max-h-full overflow-auto">
-          {item.map((el, i) => (
+          {item && item.map((el, i) => (
             <div key={i} className="flex gap-1.5 flex-col p-4 bg-gray-100">
               <h2 className="text-xl font-medium">{el.title}</h2>
               <p className="text-xs text-gray-500">{el.sub}</p>
@@ -44,7 +40,7 @@ export default function KYCUploadDocuments() {
           <button
             onClick={() => {
               localStorage.setItem("hideNotification", "ok");
-              navigate("/user/dashboard");
+              router.push("/admin/dashboards");
             }}
             className="text-white bg-themeDarkGreen py-3 rounded-xl flex justify-center items-center max-w-xs mt-3 w-full mx-auto"
           >
@@ -57,7 +53,7 @@ export default function KYCUploadDocuments() {
 }
 
 const data = {
-  1: [
+  '1': [
     {
       title: "Bank or Credit Card Statement",
       sub: "A document issued by a financial institution in the last 3 months, which includes a full address, issue date and full name of the receiver.",
@@ -75,7 +71,7 @@ const data = {
       sub: "An address proof document issued by National Address which includes the issue date, your full name, proof number and your full address of residence.",
     },
   ],
-  2: [
+  '2': [
     {
       title: "Bank or Credit Card Statement",
       sub: "A document issued by a financial institution in the last 3 months, which includes a full address, issue date and full name of the receiver.",
@@ -93,7 +89,7 @@ const data = {
       sub: "A document issued by a utilities or telecoms company in the last 3 months, which includes a full address, issue date and full name of the receiver.",
     },
   ],
-  3: [
+  '3': [
     {
       title: "Lease or Tenancy Contract",
       sub: "A contract or document of rental between a property owner and a renter, which includes a full address and full name of the tenant.",
@@ -111,7 +107,7 @@ const data = {
       sub: "A Government issued identification document for the registered tenant of the property that you reside in, such as a passport, national ID or driving license",
     },
   ],
-  4: [
+  '4': [
     {
       title: "Hotel Tenancy Contract",
       sub: "A document or contract of agreement between a hotel operator and a tenant for a stay of 3 months or more, which includes the name of the hotel or hotel operator, a full address, issue date and full name of the tenant.",
@@ -121,7 +117,7 @@ const data = {
       sub: "A formal letter from the hotel where you are staying, which outlines the name of the hotel or hotel operator, the issue date for the letter, the full name of the guest, the full address of the hotel, and the check-in and check out dates. The total stay must be for 3 months or more.",
     },
   ],
-  5: [
+  '5': [
     {
       title: "Bank or Credit Card Statement",
       sub: "A document issued by a financial institution in the last 3 months, which includes a full address, issue date and full name of the receiver.",
@@ -135,7 +131,7 @@ const data = {
       sub: "A document issued by a utilities or telecoms company in the last 3 months, which includes a full address, issue date and full name of the receiver.",
     },
   ],
-  6: [
+  '6': [
     {
       title: "Bank or Credit Card Statement",
       sub: "A document issued by a financial institution in the last 3 months, which includes a full address, issue date and full name of the receiver.",

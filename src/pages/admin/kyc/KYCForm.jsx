@@ -7,7 +7,7 @@ import { IoIosPeople } from "react-icons/io";
 import { PiBuildings } from "react-icons/pi";
 import { IoBriefcaseOutline } from "react-icons/io5";
 import { FaRegCircleQuestion } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 export default function KYCForm() {
   return (
@@ -38,7 +38,7 @@ export default function KYCForm() {
 const Navigation = ({ Icon, text, index }) => {
   return (
     <Link
-      to={`/user/upload?page=${index + 1}`}
+      href={`/admin/kyc/uploadpage?page=${index + 1}`}
       className="p-2 rounded-md cursor-pointer hover:bg-gray-200 transition-all duration-300 bg-gray-50 flex items-center gap-5"
     >
       <div className="p-2 rounded-full bg-green-100">

@@ -45,16 +45,19 @@ const AuthProvider = ({ children }) => {
 
           // const res = await api.get(`/personal/personal.getcurrentuserdetailasync`)
           // setUser({ ...res.data?.data, role: 'admin' })
-          setUser(JSON.parse(localstorage.getItem('user')))
+          setUser(JSON.parse(localStorage.getItem('user')))
 
         } catch (error) {
+          console.log("errorredirect", error)
           if (error?.response?.status === 401) {
             window.localStorage.removeItem('accessToken')
             window.localStorage.removeItem('refreshToken')
-            window.localStorage.removeItem('userData')
+            window.localStorage.removeItem('user')
             localStorage.removeItem('userInfo')
             router.replace('/login')
           } else {
+            console.log("errorredirectelse")
+
             setLoading(false)
             router.replace('/login')
           }
@@ -74,9 +77,9 @@ const AuthProvider = ({ children }) => {
   const handleLogin = async (params, errorCallback) => {
     const { email, password } = params
     try {
-      const res = await axios.get(
+      const res = await axios.post(
         `${baseURL + '/auth/user.getToken'}`,
-        { params: {Email:email, Password:password} },
+         {Email:email, Password:password} ,
         
       )
        console.log("res", res)

@@ -13,7 +13,7 @@ function GetReady() {
 
       <Link
         className="bg-themeDarkGreen text-white md:text-xl py-2 px-5 rounded font-bold "
-        href={"/portfolio/Contacts"}
+        href="/portfolio/contact"
       >
         Contact Us
       </Link>

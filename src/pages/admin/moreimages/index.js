@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { Link, useLocation } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
+import Link from "next/link";
 
 export default function MoreImages() {
   const arr = [
@@ -16,19 +16,19 @@ export default function MoreImages() {
     chunck.push(arr.slice(i, i + 3));
   }
 
-  const location = useLocation();
+  // const location = useRouter();
 
-  const link =
-    location.pathname === "/user/more-images"
-      ? "/user/dashboard-details"
-      : "/page/details";
+  // const link =
+  //   location.pathname === "/user/more-images"
+  //     ? "/user/dashboard-details"
+  //     : "/page/details";
 
   return (
     <div className="p-5 max-w-7xl mx-auto">
       <div>
         <Link
+        href='/admin/detail'
           className="font-medium text-lg text-green-500 flex items-center gap-2"
-          to={link}
         >
           <IoIosArrowBack /> Back to details
         </Link>

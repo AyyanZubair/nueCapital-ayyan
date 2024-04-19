@@ -23,9 +23,10 @@ module.exports = {
         themeGreenl2: "#8CD85D4D",
         themelightgreen:"#98E16933"
       },
-      backgroundImage: {
-        'contactpattern': "url('./assests//images/Ellipse1.svg')",
-    }
+      
+    //   backgroundImage: {
+    //     // 'contactpattern': "url('./assests//images/Ellipse1.svg')",
+    // }
     }
   },
   plugins: []

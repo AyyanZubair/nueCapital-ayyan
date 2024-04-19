@@ -34,7 +34,7 @@ return (
       <img src={url} className="rounded w-full h-full object-cover" alt="" />
       {index === 3 && (
         <Link
-          href={link}
+          href='/portfolio/moreimages'
           className="bg-white flex justify-center items-center lg:h-12 h-9 rounded-full shadow-md text-green-600 font-semibold absolute -bottom-4 lg:-bottom-6 left-1/2 -translate-x-1/2 text-xs w-[100px] lg:w-[200px] hover:scale-105 transition-all duration-300 cursor-pointer"
         >
           More Images

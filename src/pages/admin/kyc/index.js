@@ -1,6 +1,7 @@
 import React from 'react'
+import KYCForm from './KYCForm'
 
-function KYCForm() {
+function KYC() {
   return (
     <div>
         <KYCForm/>
@@ -8,4 +9,4 @@ function KYCForm() {
   )
 }
 
-export default KYCForm
+export default KYC
