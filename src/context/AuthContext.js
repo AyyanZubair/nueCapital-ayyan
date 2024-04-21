@@ -57,9 +57,11 @@ const AuthProvider = ({ children }) => {
             router.replace('/login')
           } else {
             console.log("errorredirectelse")
-
-            setLoading(false)
-            router.replace('/login')
+             if(!router.pathname.includes('portfolio')){
+               router.replace('/login')
+              }
+              setLoading(false)
+           
           }
         } finally {
           setLoading(false)
@@ -122,7 +124,7 @@ const AuthProvider = ({ children }) => {
 
     setUser(null)
 
-    router.replace('/auth/login')
+    router.replace('/login')
   }
 
   const values = {
