@@ -56,7 +56,6 @@ const AuthProvider = ({ children }) => {
             localStorage.removeItem('userInfo')
             router.replace('/login')
           } else {
-            console.log("errorredirectelse")
              if(!router.pathname.includes('portfolio')){
                router.replace('/login')
               }
