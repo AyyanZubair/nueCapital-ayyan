@@ -38,17 +38,18 @@ const AuthProvider = ({ children }) => {
     const initAuth = async () => {
       const storedToken = window.localStorage.getItem('accessToken')
 
-      if (storedToken && !user) {
+      if (storedToken) {
         setLoading(true)
         try {
-          // const res = await api.get(`/users/users.getuserdetailsbyidasync`, { params: { id:JSON.parse(localStorage.getItem('user')).id } });
+          const res = await api.get(`/Users/user.getcurrentuserdetailasync`)
 
           // const res = await api.get(`/personal/personal.getcurrentuserdetailasync`)
-          // setUser({ ...res.data?.data, role: 'admin' })
-          setUser(JSON.parse(localStorage.getItem('user')))
 
+          setUser({ ...res.data, role: 'admin' })
+
+          // setUser(JSON.parse(localStorage.getItem('user')))
         } catch (error) {
-          console.log("errorredirect", error)
+          console.log('errorredirect', error)
           if (error?.response?.status === 401) {
             window.localStorage.removeItem('accessToken')
             window.localStorage.removeItem('refreshToken')
@@ -56,11 +57,10 @@ const AuthProvider = ({ children }) => {
             localStorage.removeItem('userInfo')
             router.replace('/login')
           } else {
-             if(!router.pathname.includes('portfolio')){
-               router.replace('/login')
-              }
-              setLoading(false)
-           
+            if (!router.pathname.includes('portfolio')) {
+              router.replace('/login')
+            }
+            setLoading(false)
           }
         } finally {
           setLoading(false)
@@ -74,16 +74,11 @@ const AuthProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-
   const handleLogin = async (params, errorCallback) => {
     const { email, password } = params
     try {
-      const res = await axios.post(
-        `${baseURL + '/auth/user.getToken'}`,
-         {Email:email, Password:password} ,
-        
-      )
-       console.log("res", res)
+      const res = await axios.post(`${baseURL + '/auth/user.getToken'}`, { Email: email, Password: password })
+      console.log('res', res)
 
       // localStorage.removeItem('userInfo')
       localStorage.setItem('accessToken', res?.data?.data?.token.token)
@@ -109,8 +104,6 @@ const AuthProvider = ({ children }) => {
   }
 
   const handleLogout = () => {
-
-
     // window.localStorage.clear()
 
     window.localStorage.removeItem('accessToken')
