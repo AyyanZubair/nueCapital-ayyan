@@ -14,7 +14,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel from '@mui/material/FormControlLabel'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@mui/material'
-import {logo} from "../../../public/portfolioImages/logo.svg"
+import { logo } from '../../../public/portfolioImages/logo.svg'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -119,27 +119,13 @@ const LoginPage = () => {
   return (
     <Box className='content-right' sx={{ backgroundColor: 'background.paper' }}>
       {!hidden ? (
-
-        // <Box
-        //   sx={{
-        //     flex: 1,
-        //     display: 'flex',
-        //     position: 'relative',
-        //     alignItems: 'center',
-        //     borderRadius: '20px',
-        //     justifyContent: 'center',
-        //     backgroundColor: 'customColors.bodyBg',
-        //     margin: theme => theme.spacing(5, 0, 5, 8)
-        //   }}
-        // >
-        <>
-          <Image src={login} alt='login image' style={{ height: '100vh', objectFit: 'contain', width: '50%' }} />
+        <div className='flex justify-center items-center w-[50vw] max-h-screen py-5'>
+          <Image src={login} alt='login image' className='object-contain max-h-full' />
           <FooterIllustrationsV2 />
-        </>
+        </div>
+      ) : // </Box>
 
-        // </Box>
-
-      ) : null}
+      null}
       <RightWrapper>
         <Box
           sx={{
@@ -235,7 +221,7 @@ const LoginPage = () => {
                   label={t('Remember Me')}
                   control={<Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />}
                 />
-                <Typography component={LinkStyled} href='/forgot-password' className='pointer' >
+                <Typography component={LinkStyled} href='/forgot-password' className='pointer'>
                   {t('Forgot Password?')}
                 </Typography>
               </Box>
@@ -251,9 +237,9 @@ const LoginPage = () => {
               </Button>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography sx={{ color: 'text.secondary', mr: 2 }}>{t('New on our platform?')}</Typography>
-                <Typography>
+                <Link href={'/register'} className='text-themeDarkGreen'>
                   {t('Create an account')}
-                </Typography>
+                </Link>
               </Box>
             </form>
           </Box>

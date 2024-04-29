@@ -1,29 +1,15 @@
-import { BiSolidGridAlt } from 'react-icons/bi'
-
 const navigation = () => {
   return [
     {
       icon: 'tabler:smart-home',
-      title: 'Home',
+      title: 'Dashboard',
       path: '/admin/dashboards',
       role: 'admin'
     },
     {
-      icon: 'tabler:wallet',
-      title: 'Wallet',
-      path: '/admin/wallet',
-      role: 'admin'
-    },
-    {
-      icon: 'tabler:briefcase',
-      title: 'Portfolio',
-      path: '/admin/portfolio',
-      role: 'admin'
-    },
-    {
-      icon: 'tabler:user',
-      title: 'Profile',
-      path: '/admin/profile',
+      icon: 'tabler:building-community',
+      title: 'Programs',
+      path: '/admin/Programs',
       role: 'admin'
     },
     {

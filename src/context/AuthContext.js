@@ -116,7 +116,7 @@ const AuthProvider = ({ children }) => {
 
     setUser(null)
 
-    router.replace('/login')
+    router.replace('/portfolio/home')
   }
 
   const values = {

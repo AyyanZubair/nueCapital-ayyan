@@ -28,13 +28,12 @@ const FooterContent = () => {
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
       <Typography sx={{ mr: 2, display: 'flex', color: 'text.secondary' }}>
-        {`© ${new Date().getFullYear()}, Made with `}
+        {`© ${new Date().getFullYear()}, Made `}
         {`by`}
         <Typography sx={{ ml: 1 }} target='_blank' href='https://www.machknowsoft.net' component={StyledCompanyName}>
           Nue Capital
         </Typography>
       </Typography>
-
     </Box>
   )
 }

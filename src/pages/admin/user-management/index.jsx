@@ -20,7 +20,6 @@ import CustomChip from 'src/@core/components/mui/chip'
 import toast from 'react-hot-toast'
 import UserModal from './components/UserModal'
 import { t } from 'i18next'
-import { useTranslation } from 'react-i18next'
 import useAPI from 'src/hooks/useNewApi'
 import axios from 'axios'
 import { baseURL } from 'src/Constants/Constants'
@@ -31,23 +30,6 @@ const RowOptions = ({ data }) => {
   const api = useAPI()
 
   // query
-
-  const queryClient = useQueryClient()
-
-  const mutation = useMutation({
-    mutationKey: ['deleteUser'],
-    mutationFn: id => api.post(`/users/user.deleteuserasync`, {}, { params: { id } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(['users'])
-      handleRowOptionsClose()
-      toast.success('User Deleted')
-    },
-    onError: errors => {
-      console.log(errors)
-      handleRowOptionsClose()
-      toast.error('Request Failed')
-    }
-  })
 
   const handleRowOptionsClick = event => {
     setAnchorEl(event.currentTarget)
@@ -105,88 +87,96 @@ const RowOptions = ({ data }) => {
   )
 }
 
-const UserList = ({ apiData }) => {
-  const { t } = useTranslation()
+const columns = [
+  {
+    flex: 0.25,
+    minWidth: 280,
+    field: 'firstName',
+    headerName: t('User Name'),
+    renderCell: ({ row }) => <UserModal row={row} />
+  },
+  {
+    flex: 0.15,
+    field: 'isActive',
+    minWidth: 170,
+    headerName: t('Active'),
+    renderCell: ({ row }) => {
+      return (
+        <CustomChip
+          rounded
+          skin='light'
+          size='small'
+          label={row.isActive ? t('Active') : t('Inactive')}
+          color={row.isActive ? 'success' : 'warning'}
+          sx={{ textTransform: 'capitalize' }}
+        />
+      )
+    }
+  },
+  {
+    flex: 0.15,
+    minWidth: 120,
+    headerName: t('Verified'),
+    field: 'emailConfirmed',
+    renderCell: ({ row }) => {
+      return (
+        <Typography
+          noWrap
+          sx={{
+            color: row.emailConfirmed ? theme => theme.palette.success.main : theme => theme.palette.error.main,
+            marginLeft: '15px'
+          }}
+        >
+          <Icon icon={row.emailConfirmed ? 'tabler:shield-check' : 'tabler:shield-x'} fontSize={24} />
+        </Typography>
+      )
+    }
+  },
+  {
+    flex: 0.15,
+    minWidth: 190,
+    field: 'roles[0].roleName',
+    headerName: t('Role'),
+    renderCell: ({ row }) => {
+      return (
+        <Typography noWrap sx={{ color: 'text.secondary' }}>
+          {row?.roles.map((role, index) => (
+            <Tooltip key={index} title={row?.roles?.map(r => r.roleName).join(', ')}>
+              <span style={{ display: 'inline' }}>
+                {t(role.roleName)}
+                {index < row.roles.length - 1 && ', '}
+              </span>
+            </Tooltip>
+          ))}
+        </Typography>
+      )
+    }
+  },
+
+  {
+    flex: 0.1,
+    minWidth: 100,
+    sortable: false,
+    field: 'actions',
+    headerName: t('Actions'),
+    renderCell: ({ row }) => (
+      <div className='flex items-center gap-4'>
+        <button onClick={() => row.editFn(row)}>
+          <Icon icon='tabler:edit' />
+        </button>
+        <button onClick={() => row.delFn(row.id)}>
+          <Icon icon='tabler:trash' />
+        </button>
+      </div>
+    )
+  }
+]
+
+const UserList = () => {
   const api = useAPI()
 
-  const columns = [
-    {
-      flex: 0.25,
-      minWidth: 280,
-      field: 'firstName',
-      headerName: t('User Name'),
-      renderCell: ({ row }) => <UserModal row={row} />
-    },
-    {
-      flex: 0.15,
-      field: 'isActive',
-      minWidth: 170,
-      headerName: t('Active'),
-      renderCell: ({ row }) => {
-        return (
-          <CustomChip
-            rounded
-            skin='light'
-            size='small'
-            label={row.isActive ? t('Active') : t('Inactive')}
-            color={row.isActive ? 'success' : 'warning'}
-            sx={{ textTransform: 'capitalize' }}
-          />
-        )
-      }
-    },
-    {
-      flex: 0.15,
-      minWidth: 120,
-      headerName: t('Verified'),
-      field: 'emailConfirmed',
-      renderCell: ({ row }) => {
-        return (
-          <Typography
-            noWrap
-            sx={{
-              color: row.emailConfirmed ? theme => theme.palette.success.main : theme => theme.palette.error.main,
-              marginLeft: '15px'
-            }}
-          >
-            <Icon icon={row.emailConfirmed ? 'tabler:shield-check' : 'tabler:shield-x'} fontSize={24} />
-          </Typography>
-        )
-      }
-    },
-    {
-      flex: 0.15,
-      minWidth: 190,
-      field: 'roles[0].roleName',
-      headerName: t('Role'),
-      renderCell: ({ row }) => {
-        return (
-          <Typography noWrap sx={{ color: 'text.secondary' }}>
-            {row?.roles.map((role, index) => (
-              <Tooltip key={index} title={row?.roles?.map(r => r.roleName).join(', ')}>
-                <span style={{ display: 'inline' }}>
-                  {t(role.roleName)}
-                  {index < row.roles.length - 1 && ', '}
-                </span>
-              </Tooltip>
-            ))}
-          </Typography>
-        )
-      }
-    },
-
-    {
-      flex: 0.1,
-      minWidth: 100,
-      sortable: false,
-      field: 'actions',
-      headerName: t('Actions'),
-      renderCell: ({ row }) => <RowOptions data={row} />
-    }
-  ]
   const [addUserOpen, setAddUserOpen] = useState(false)
   const [searchValue, setSearchValue] = useState('')
-  const [allUsers, setAllUsers] = useState([])
   const [usersToShow, setUsersToShow] = useState([])
   const [itemToEdit, setItemToEdit] = useState(null)
   const [openEditUser, setOpenEditUser] = useState(false)
@@ -211,28 +201,21 @@ const UserList = ({ apiData }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
-  async function check() {
-    try {
-      const res = await axios.get(baseURL + '/Users/users.getlistofallusersasync')
-      console.log('res', res)
-    } catch (error) {
-      console.log('error', error)
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationKey: ['deleteUser'],
+    mutationFn: id => api.post(`/users/user.deleteuserasync`, {}, { params: { id } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['users'])
+      toast.success('User Deleted')
+    },
+    onError: errors => {
+      console.log(errors)
+      handleRowOptionsClose()
+      toast.error('Request Failed')
     }
-  }
-
-  check()
-
-  const [dLoading, setDLoading] = useState(true)
-
-  useEffect(() => {
-    if (isLoading) {
-      setDLoading(true)
-    } else {
-      setTimeout(() => {
-        setDLoading(false)
-      }, 0)
-    }
-  }, [isLoading])
+  })
 
   return (
     <Grid container spacing={6.5}>
@@ -252,17 +235,23 @@ const UserList = ({ apiData }) => {
               rowHeight={62}
               rows={
                 usersToShow.length > 0
-                  ? usersToShow?.map(el => ({
-                      ...el,
-                      editFn: data => {
-                        setItemToEdit(data)
-                        setOpenEditUser(true)
-                      }
-                    }))
+                  ? usersToShow
+                      ?.filter(u => u.fullName.toLowerCase().includes(searchValue.toLowerCase()))
+                      .map(el => ({
+                        ...el,
+                        editFn: data => {
+                          setItemToEdit(data)
+                          setOpenEditUser(true)
+                        },
+                        delFn: id => {
+                          const confirm = window.confirm('Cofirm delete user?')
+                          if (confirm) mutation.mutate(id)
+                        }
+                      }))
                   : []
               }
               columns={columns}
-              loading={dLoading}
+              loading={isLoading}
               loadingOverlayComponent={<CircularProgress />}
               disableRowSelectionOnClick
               pageSizeOptions={[10, 25, 50]}

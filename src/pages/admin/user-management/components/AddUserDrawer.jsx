@@ -199,155 +199,181 @@ const AddRoleDrawer = ({ open, toggle }) => {
           </Button>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Controller
-            name='fullName'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label={t('Full Name')}
-                onChange={onChange}
-                placeholder='Jhon Doe'
-                error={Boolean(errors.fullName)}
-                {...(errors.fullName && { helperText: errors.fullName.message })}
-              />
-            )}
-          />
+        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
+          <div>
+            <p>
+              {t('Full Name')}
+              <span className='font-bold text-red-500'>*</span>
+            </p>
+            <Controller
+              name='fullName'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <CustomTextField
+                  fullWidth
+                  value={value}
+                  onChange={onChange}
+                  placeholder='Jhon Doe'
+                  error={Boolean(errors.fullName)}
+                  {...(errors.fullName && { helperText: errors.fullName.message })}
+                />
+              )}
+            />
+          </div>
 
-          <Controller
-            name='username'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label={t('Username')}
-                onChange={onChange}
-                placeholder={t('Username')}
-                error={Boolean(errors.username)}
-                {...(errors.username && { helperText: errors.username.message })}
-              />
-            )}
-          />
-          <Controller
-            name='email'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label={t('Email')}
-                onChange={onChange}
-                placeholder='example@email.com'
-                error={Boolean(errors.email)}
-                {...(errors.email && { helperText: errors.email.message })}
-              />
-            )}
-          />
-          <Controller
-            name='password'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <Box sx={{ position: 'relative' }}>
+          <div>
+            <p>
+              {t('Username')}
+              <span className='font-bold text-red-500'>*</span>
+            </p>
+            <Controller
+              name='username'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
                 <CustomTextField
                   fullWidth
-                  type={showPassword ? 'text' : 'password'}
                   value={value}
-                  sx={{ mb: 4 }}
-                  label={t('Password')}
                   onChange={onChange}
-                  placeholder={t('Password')}
-                  error={Boolean(errors.password)}
-                  {...(errors.password && { helperText: errors.password.message })}
-                  InputProps={{
-                    endAdornment: (
-                      <IconButton
-                        aria-label={showPassword ? t('Hide Password') : t('Show Password')}
-                        onClick={() => setShowPassword(!showPassword)} // Toggle showPassword state
-                        sx={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)' }}
-                      >
-                        <Icon icon={showPassword ? 'tabler:eye-off' : 'tabler:eye'} fontSize='1.25rem' />
-                      </IconButton>
-                    )
-                  }}
+                  placeholder={t('Username')}
+                  error={Boolean(errors.username)}
+                  {...(errors.username && { helperText: errors.username.message })}
                 />
-              </Box>
-            )}
-          />
-          <Controller
-            name='confirmPassword'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <Box sx={{ position: 'relative' }}>
+              )}
+            />
+          </div>
+          <div>
+            <p>
+              {t('Email')}
+              <span className='font-bold text-red-500'>*</span>
+            </p>
+            <Controller
+              name='email'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
                 <CustomTextField
                   fullWidth
-                  type={showConfirmPassword ? 'text' : 'password'}
                   value={value}
-                  sx={{ mb: 4 }}
-                  label={t('Confirm Password')}
                   onChange={onChange}
-                  placeholder={t('Confirm Password')}
-                  error={Boolean(errors.confirmPassword)}
-                  {...(errors.confirmPassword && { helperText: errors.confirmPassword.message })}
-                  InputProps={{
-                    endAdornment: (
-                      <IconButton
-                        aria-label={showConfirmPassword ? t('Hide Confirm Password') : t('Show Confirm Password')}
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        sx={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)' }}
-                      >
-                        <Icon icon={showConfirmPassword ? 'tabler:eye-off' : 'tabler:eye'} fontSize='1.25rem' />
-                      </IconButton>
-                    )
-                  }}
+                  placeholder='example@email.com'
+                  error={Boolean(errors.email)}
+                  {...(errors.email && { helperText: errors.email.message })}
                 />
-              </Box>
-            )}
-          />
-          <Controller
-            name='phoneNumber'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label={t('Phone Number')}
-                onChange={onChange}
-                placeholder='+920011232323'
-                error={Boolean(errors.phoneNumber)}
-                {...(errors.phoneNumber && { helperText: errors.phoneNumber.message })}
-              />
-            )}
-          />
-          <Controller
-            name='isActive'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <div className='flex items-center pb-5'>
-                <Switch
-                  checked={value}
-                  label={t('Active')}
+              )}
+            />
+          </div>
+          <div>
+            <p>
+              {t('Password')}
+              <span className='font-bold text-red-500'>*</span>
+            </p>
+            <Controller
+              name='password'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <Box sx={{ position: 'relative' }}>
+                  <CustomTextField
+                    fullWidth
+                    type={showPassword ? 'text' : 'password'}
+                    value={value}
+                    onChange={onChange}
+                    placeholder={t('Password')}
+                    error={Boolean(errors.password)}
+                    {...(errors.password && { helperText: errors.password.message })}
+                    InputProps={{
+                      endAdornment: (
+                        <IconButton
+                          aria-label={showPassword ? t('Hide Password') : t('Show Password')}
+                          onClick={() => setShowPassword(!showPassword)} // Toggle showPassword state
+                          sx={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)' }}
+                        >
+                          <Icon icon={showPassword ? 'tabler:eye-off' : 'tabler:eye'} fontSize='1.25rem' />
+                        </IconButton>
+                      )
+                    }}
+                  />
+                </Box>
+              )}
+            />
+          </div>
+          <div>
+            <p>
+              {t('Confirm Password')}
+              <span className='font-bold text-red-500'>*</span>
+            </p>
+            <Controller
+              name='confirmPassword'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <Box sx={{ position: 'relative' }}>
+                  <CustomTextField
+                    fullWidth
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    value={value}
+                    onChange={onChange}
+                    placeholder={t('Confirm Password')}
+                    error={Boolean(errors.confirmPassword)}
+                    {...(errors.confirmPassword && { helperText: errors.confirmPassword.message })}
+                    InputProps={{
+                      endAdornment: (
+                        <IconButton
+                          aria-label={showConfirmPassword ? t('Hide Confirm Password') : t('Show Confirm Password')}
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          sx={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)' }}
+                        >
+                          <Icon icon={showConfirmPassword ? 'tabler:eye-off' : 'tabler:eye'} fontSize='1.25rem' />
+                        </IconButton>
+                      )
+                    }}
+                  />
+                </Box>
+              )}
+            />
+          </div>
+          <div>
+            <p>
+              {t('Phone Number')}
+              <span className='font-bold text-red-500'>*</span>
+            </p>
+            <Controller
+              name='phoneNumber'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <CustomTextField
+                  fullWidth
+                  value={value}
                   onChange={onChange}
-                  error={errors.isActive}
-                  {...(errors.isActive && { helperText: errors.isActive.message })}
+                  placeholder='+920011232323'
+                  error={Boolean(errors.phoneNumber)}
+                  {...(errors.phoneNumber && { helperText: errors.phoneNumber.message })}
                 />
-                <Typography sx={{ ml: 2 }}>{t('Active')}</Typography>
-              </div>
-            )}
-          />
+              )}
+            />
+          </div>
+          <div>
+            <Controller
+              name='isActive'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <div className='flex items-center pb-5'>
+                  <Switch
+                    checked={value}
+                    label={t('Active')}
+                    onChange={onChange}
+                    error={errors.isActive}
+                    {...(errors.isActive && { helperText: errors.isActive.message })}
+                  />
+                  <Typography sx={{ ml: 2 }}>{t('Active')}</Typography>
+                </div>
+              )}
+            />
+          </div>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button type='submit' variant='outlined' sx={{ mr: 3 }}>
               {mutation.isPending ? t('Loading...') : t('Submit')}

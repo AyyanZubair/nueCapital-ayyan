@@ -96,7 +96,7 @@ const Register = () => {
           }
         }
       )
-      console.log("register", res.data)
+      console.log('register', res.data)
 
       localStorage.setItem(
         'userInfo',
@@ -117,22 +117,10 @@ const Register = () => {
   return (
     <Box className='content-right' sx={{ backgroundColor: 'background.paper' }}>
       {!hidden ? (
-        <Box
-          sx={{
-            flex: 1,
-            display: 'flex',
-
-            position: 'relative',
-            alignItems: 'center',
-            borderRadius: '20px',
-            justifyContent: 'center',
-            backgroundColor: 'customColors.bodyBg',
-            margin: theme => theme.spacing(5, 0, 5, 8)
-          }}
-        >
-          <Image alt='signup' src={signup} style={{ height: '100vh', objectFit: 'contain', width: '100%' }} />
+        <div className='flex justify-center items-center w-[50vw] max-h-screen py-5'>
+          <Image alt='signup' src={signup} className='object-contain max-h-full' />
           <FooterIllustrationsV2 />
-        </Box>
+        </div>
       ) : null}
       <RightWrapper>
         <Box
@@ -155,7 +143,7 @@ const Register = () => {
             </Box>
             <Box sx={{ mb: 2, mt: -6 }}>
               <Typography variant='h3' sx={{ mb: 1.5 }}>
-                {t('Welcome to') + ' ' + themeConfig.templateName + '!' + '👋🏻'}
+                {t('Welcome to') + ' ' + themeConfig.templateName + '!'}
               </Typography>
               <Typography sx={{ color: 'text.secondary' }}>
                 {t('Please sign-up to your account and start the adventure')}
@@ -164,90 +152,111 @@ const Register = () => {
                 <Typography sx={{ color: 'red', textAlign: 'center', py: '5px' }}>{t(errorMessage)}</Typography>
               )}
             </Box>
-            <form onSubmit={hanldeSubmit}>
-              <CustomTextField
-                autoFocus
-                required
-                fullWidth
-                sx={{ mb: 4 }}
-                label={t('Username')}
-                placeholder='johndoe'
-                value={data.userName}
-                onChange={e => setData(p => ({ ...p, userName: e.target.value }))}
-              />
-              <CustomTextField
-                required
-                fullWidth
-                sx={{ mb: 4 }}
-                label={t('Full Name')}
-                placeholder='john'
-                value={data.fullName}
-                onChange={e => setData(p => ({ ...p, fullName: e.target.value }))}
-              />
-              
-              <CustomTextField
-                required
-                type='email'
-                fullWidth
-                sx={{ mb: 4 }}
-                label={t('Email')}
-                placeholder='example@mail.com'
-                value={data.email}
-                onChange={e => setData(p => ({ ...p, email: e.target.value }))}
-              />
-              <CustomTextField
-                required
-                fullWidth
-                sx={{ mb: 4 }}
-                label={t('Phone Number')}
-                placeholder='+555-555-555'
-                value={data.phoneNumber}
-                onChange={e => setData(p => ({ ...p, phoneNumber: e.target.value }))}
-              />
-              <CustomTextField
-                fullWidth
-                required
-                sx={{ mb: 4 }}
-                label={t('Password')}
-                type={showPassword ? 'text' : 'password'}
-                value={data.password}
-                onChange={e => setData(p => ({ ...p, password: e.target.value }))}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <IconButton
-                        edge='end'
-                        onMouseDown={e => e.preventDefault()}
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        <Icon fontSize='1.25rem' icon={showPassword ? 'tabler:eye' : 'tabler:eye-off'} />
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <CustomTextField
-                fullWidth
-                required
-                value={data.confirmPassword}
-                sx={{ mb: 4 }}
-                label={t('Confirm Password')}
-                type={showPassword ? 'text' : 'password'}
-                onChange={e => setData(p => ({ ...p, confirmPassword: e.target.value }))}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <IconButton
-                        edge='end'
-                        onMouseDown={e => e.preventDefault()}
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        <Icon fontSize='1.25rem' icon={showPassword ? 'tabler:eye' : 'tabler:eye-off'} />
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }}
-              />
+            <form onSubmit={hanldeSubmit} className='flex flex-col gap-3 py-5'>
+              <div>
+                <p>
+                  {t('Username')} <span className='text-red-500 font-bold'>*</span>
+                </p>
+                <CustomTextField
+                  autoFocus
+                  required
+                  fullWidth
+                  placeholder='johndoe'
+                  value={data.userName}
+                  onChange={e => setData(p => ({ ...p, userName: e.target.value }))}
+                />
+              </div>
+              <div>
+                <p>
+                  {t('Full Name')} <span className='text-red-500 font-bold'>*</span>
+                </p>
+                <CustomTextField
+                  required
+                  fullWidth
+                  placeholder='Jhon Doe'
+                  value={data.fullName}
+                  onChange={e => setData(p => ({ ...p, fullName: e.target.value }))}
+                />
+              </div>
+
+              <div>
+                {' '}
+                <p>
+                  {t('Email')} <span className='text-red-500 font-bold'>*</span>
+                </p>
+                <CustomTextField
+                  required
+                  type='email'
+                  fullWidth
+                  placeholder='example@mail.com'
+                  value={data.email}
+                  onChange={e => setData(p => ({ ...p, email: e.target.value }))}
+                />
+              </div>
+              <div>
+                {' '}
+                <p>
+                  {t('Phone Number')} <span className='text-red-500 font-bold'>*</span>
+                </p>
+                <CustomTextField
+                  required
+                  fullWidth
+                  placeholder='+555-555-555'
+                  value={data.phoneNumber}
+                  onChange={e => setData(p => ({ ...p, phoneNumber: e.target.value }))}
+                />
+              </div>
+              <div>
+                <p>
+                  {t('Password')} <span className='text-red-500 font-bold'>*</span>
+                </p>
+                <CustomTextField
+                  fullWidth
+                  required
+                  type={showPassword ? 'text' : 'password'}
+                  value={data.password}
+                  onChange={e => setData(p => ({ ...p, password: e.target.value }))}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position='end'>
+                        <IconButton
+                          edge='end'
+                          onMouseDown={e => e.preventDefault()}
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          <Icon fontSize='1.25rem' icon={showPassword ? 'tabler:eye' : 'tabler:eye-off'} />
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </div>
+
+              <div>
+                <p>
+                  {t('Confirm Password')} <span className='text-red-500 font-bold'>*</span>
+                </p>
+                <CustomTextField
+                  fullWidth
+                  required
+                  value={data.confirmPassword}
+                  type={showPassword ? 'text' : 'password'}
+                  onChange={e => setData(p => ({ ...p, confirmPassword: e.target.value }))}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position='end'>
+                        <IconButton
+                          edge='end'
+                          onMouseDown={e => e.preventDefault()}
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          <Icon fontSize='1.25rem' icon={showPassword ? 'tabler:eye' : 'tabler:eye-off'} />
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </div>
 
               <Button
                 fullWidth
@@ -256,7 +265,6 @@ const Register = () => {
                 color='primary'
                 disabled={loading}
                 className='bg-[#24C6B7] text-white text-center py-2 w-full rounded-md hover:bg-opacity-80 disabled:bg-gray-500 mb-5'
-                sx={{ mb: 4 }}
               >
                 {t('Register')}
               </Button>

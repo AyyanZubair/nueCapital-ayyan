@@ -3,31 +3,25 @@ const navigation = () => {
     {
       icon: 'tabler:smart-home',
       title: 'Dashboard',
-      path: '/vendor/dashboards',
-      role: 'vendor'
-    },
-    {
-      icon: 'tabler:building-store',
-      title: 'Products Management',
-      path: '/vendor/products-management',
-      role: 'vendor'
-    },
-    {
-      title: 'Orders',
-      path: '/vendor/orders',
-      icon: 'tabler:checklist',
-      role: 'vendor'
-    },
-    {
-      title: 'Settings',
-      path: '/vendor/setting',
-      icon: 'tabler:settings',
-      role: 'vendor'
-    },
-    {
-      icon: 'tabler:smart-home',
-      title: 'lllll',
       path: '/admin/dashboards',
+      role: 'admin'
+    },
+    {
+      icon: 'tabler:building-community',
+      title: 'Programs',
+      path: '/admin/Programs',
+      role: 'admin'
+    },
+    {
+      icon: 'tabler:user',
+      title: 'User Management',
+      path: '/admin/user-management',
+      role: 'admin'
+    },
+    {
+      icon: 'tabler:user',
+      title: 'Roles Management',
+      path: '/admin/roles',
       role: 'admin'
     }
   ]

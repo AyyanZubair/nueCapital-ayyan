@@ -3,9 +3,13 @@ import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai'
 import logo from '../../../../../public/portfolioImages/logo.svg'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useSettings } from 'src/@core/hooks/useSettings'
+import { useTranslation } from 'react-i18next'
 
 const VerticalNavbar = () => {
   const [nav, setNav] = useState(false)
+  const { settings, saveSettings } = useSettings()
+  const { i18n } = useTranslation()
 
   const [activeItem, setActiveItem] = useState(localStorage.getItem('activeNav') || 1) // Initially set the active item to the first one
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -32,11 +36,6 @@ const VerticalNavbar = () => {
     setDropdownOpen(false)
   }
 
-  const handleLanguageSelect = language => {
-    setSelectedLanguage(language)
-    closeDropdown()
-  }
-
   const handleNav = () => {
     setNav(!nav)
   }
@@ -53,6 +52,14 @@ const VerticalNavbar = () => {
     { id: 3, text: 'Properties', link: '/portfolio/properties' },
     { id: 4, text: 'Sell', link: '/portfolio/sell' }
   ]
+
+  function changeLanguage(lang) {
+    i18n.changeLanguage(lang)
+    localStorage.setItem('language', lang)
+    closeDropdown()
+    setSelectedLanguage(lang)
+    saveSettings({ ...settings, direction: lang === 'ar' ? 'rtl' : 'ltr' })
+  }
 
   const router = useRouter()
 
@@ -104,7 +111,7 @@ const VerticalNavbar = () => {
                 />
               </svg>
 
-              {selectedLanguage === 'EN' ? (
+              {selectedLanguage === 'en' ? (
                 <>
                   <span className='ml-1'>EN</span>
                 </>
@@ -129,7 +136,7 @@ const VerticalNavbar = () => {
                 <li>
                   <button
                     className='hover:bg-gray-200 block px-4 py-2 text-sm w-full text-left'
-                    onClick={() => handleLanguageSelect('EN')}
+                    onClick={() => changeLanguage('en')}
                   >
                     EN
                   </button>
@@ -137,7 +144,7 @@ const VerticalNavbar = () => {
                 <li>
                   <button
                     className='hover:bg-gray-200 block px-4 py-2 text-sm w-full text-left'
-                    onClick={() => handleLanguageSelect('ar')}
+                    onClick={() => changeLanguage('ar')}
                   >
                     AR
                   </button>
@@ -216,7 +223,7 @@ const VerticalNavbar = () => {
                 />
               </svg>
 
-              {selectedLanguage === 'EN' ? (
+              {selectedLanguage === 'en' ? (
                 <>
                   <span className='ml-1'>EN</span>
                 </>
@@ -241,7 +248,7 @@ const VerticalNavbar = () => {
                 <li>
                   <button
                     className='hover:bg-gray-200 block px-4 py-2 text-sm w-full text-left'
-                    onClick={() => handleLanguageSelect('EN')}
+                    onClick={() => changeLanguage('en')}
                   >
                     EN
                   </button>
@@ -249,7 +256,7 @@ const VerticalNavbar = () => {
                 <li>
                   <button
                     className='hover:bg-gray-200 block px-4 py-2 text-sm w-full text-left'
-                    onClick={() => handleLanguageSelect('ar')}
+                    onClick={() => changeLanguage('ar')}
                   >
                     AR
                   </button>

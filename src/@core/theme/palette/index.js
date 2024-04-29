@@ -40,9 +40,9 @@ const DefaultPalette = (mode, skin) => {
       contrastText: whiteColor
     },
     secondary: {
-      light: '#F2065D',
-      main: '#F2065D',
-      dark: '#F2065D',
+      light: '#5E6437',
+      main: '#5E6437',
+      dark: '#5E6437',
       contrastText: whiteColor
     },
     error: {

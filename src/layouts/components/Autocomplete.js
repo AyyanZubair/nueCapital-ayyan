@@ -34,19 +34,19 @@ import { useTranslation } from 'react-i18next'
 
 const defaultSuggestionsData = [
   {
-    category: 'HR Management',
+    category: 'Management',
     suggestions: [
       {
         suggestion: 'User Management',
-        link: '/HR-Management/user-management/'
+        link: '/admin/user-management/'
       },
       {
         suggestion: 'Roles',
-        link: '/HR-Management/roles/'
+        link: '/admin/roles/'
       },
       {
         suggestion: 'Permissions',
-        link: '/HR-Management/permissios/'
+        link: '/admin/permissios/'
       }
     ]
   },
@@ -68,8 +68,7 @@ const defaultSuggestionsData = [
       {
         suggestion: 'Groups',
         link: '/assets-management/groups/'
-      },
-
+      }
     ]
   },
   {
@@ -82,8 +81,7 @@ const defaultSuggestionsData = [
       {
         suggestion: 'Sites Reports',
         link: '/reports/site-reports'
-      },
-
+      }
     ]
   },
   {
@@ -92,14 +90,13 @@ const defaultSuggestionsData = [
       {
         suggestion: 'Settings',
         link: '/setting'
-      },
-
+      }
     ]
   }
 ]
 
 const categoryTitle = {
-  dashboards: 'Dashboards',
+  dashboards: 'Dashboards'
 
   // appsPages: 'Apps & Pages',
   // userInterface: 'User Interface',
@@ -182,7 +179,7 @@ const Dialog = styled(MuiDialog)({
 })
 
 const NoResult = ({ value, setOpenDialog }) => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }}>
@@ -200,8 +197,7 @@ const NoResult = ({ value, setOpenDialog }) => {
 }
 
 const DefaultSuggestions = ({ setOpenDialog }) => {
-
-const {t} = useTranslation()
+  const { t } = useTranslation()
 
   return (
     <Grid container spacing={6} sx={{ ml: 0 }}>
@@ -238,7 +234,15 @@ const {t} = useTranslation()
   )
 }
 
-const searchOptions = [{title:"Users Management", src:"/HR-Management/user-management"},{title:"Permissions", src:"/HR-Management/permissions"},{title:"Roles", src:"/HR-Management/roles"},{title:"Groups", src:"/assets-management/groups"},{title:"Questionnneries", src:"/assets-management/questioneries"},{title:"Routes", src:"/assets-management/routes"},{title:"Sites", src:"/assets-management/sites"}]
+const searchOptions = [
+  { title: 'Users Management', src: '/HR-Management/user-management' },
+  { title: 'Permissions', src: '/HR-Management/permissions' },
+  { title: 'Roles', src: '/HR-Management/roles' },
+  { title: 'Groups', src: '/assets-management/groups' },
+  { title: 'Questionnneries', src: '/assets-management/questioneries' },
+  { title: 'Routes', src: '/assets-management/routes' },
+  { title: 'Sites', src: '/assets-management/sites' }
+]
 
 const AutocompleteComponent = ({ hidden, settings }) => {
   // ** States
@@ -254,13 +258,12 @@ const AutocompleteComponent = ({ hidden, settings }) => {
   const wrapper = useRef(null)
   const fullScreenDialog = useMediaQuery(theme.breakpoints.down('sm'))
 
-  const {t} = useTranslation()
+  const { t } = useTranslation()
 
   // Get all data using API
   useEffect(() => {
-      setOptions(searchOptions.filter(o => o.title.toLowerCase().includes(searchValue.toLowerCase())))
+    setOptions(searchOptions.filter(o => o.title.toLowerCase().includes(searchValue.toLowerCase())))
   }, [searchValue])
-
 
   useEffect(() => {
     if (!openDialog) {
@@ -325,7 +328,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
           <Icon fontSize='1.625rem' icon='tabler:search' />
         </IconButton>
         {!hidden && layout === 'vertical' ? (
-          <Typography sx={{ userSelect: 'none', color: 'text.disabled' }}>{t('Search') +'(Ctrl+/)'}</Typography>
+          <Typography sx={{ userSelect: 'none', color: 'text.disabled' }}>{t('Search') + '(Ctrl+/)'}</Typography>
         ) : null}
         {openDialog && (
           <Dialog fullWidth open={openDialog} fullScreen={fullScreenDialog} onClose={() => setOpenDialog(false)}>
@@ -333,7 +336,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
               <Autocomplete
                 autoHighlight
                 disablePortal
-                options={options?.map(o => ({...o , title:t(o.title)}))}
+                options={options?.map(o => ({ ...o, title: t(o.title) }))}
                 id='appBar-search'
                 isOptionEqualToValue={() => true}
                 onInputChange={(event, value) => setSearchValue(value)}
