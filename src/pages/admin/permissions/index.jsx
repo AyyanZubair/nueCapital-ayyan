@@ -80,7 +80,7 @@ const Permissions = () => {
                             <th>API URL <ImportExportIcon /></th>
                             <th>Status</th>
                             <th>Data Modified <ImportExportIcon /></th>
-                            <th></th> {/* Empty header for Delete button */}
+                            <th></th> 
                         </tr>
                     </thead>
                     <tbody>
