@@ -25,6 +25,7 @@ import { useEffect, useState } from 'react'
 import { uploadImage } from 'src/utils/utils'
 import { t } from 'i18next'
 import useAPI from 'src/hooks/useNewApi'
+import { Select, MenuItem } from '@mui/material';
 
 const showErrors = (field, valueLen, min) => {
   if (valueLen === 0) {
@@ -185,7 +186,7 @@ const AddRoleDrawer = ({ open, toggle }) => {
                   <Box>
                     {t('Menu Name')} <span className='text-red-500 font-bold'>*</span>
                   </Box>
-                )} 
+                )}
                 onChange={onChange}
                 placeholder='Menu Name'
                 error={Boolean(errors.fullName)}
@@ -206,7 +207,7 @@ const AddRoleDrawer = ({ open, toggle }) => {
                   <Box>
                     {t('Menu URL')} <span className='text-red-500 font-bold'>*</span>
                   </Box>
-                )} 
+                )}
                 onChange={onChange}
                 placeholder={t('Menu URL')}
                 error={Boolean(errors.username)}
@@ -227,7 +228,7 @@ const AddRoleDrawer = ({ open, toggle }) => {
                   <Box>
                     {t('API URL')} <span className='text-red-500 font-bold'>*</span>
                   </Box>
-                )} 
+                )}
                 onChange={onChange}
                 placeholder='API URL'
                 error={Boolean(errors.email)}
@@ -243,16 +244,18 @@ const AddRoleDrawer = ({ open, toggle }) => {
               <Box sx={{ position: 'relative' }}>
                 <CustomTextField
                   fullWidth
-                  type={showPassword ? 'text' : 'password'}
+                  select
                   value={value}
                   sx={{ mb: 4 }}
                   label={t('Status')}
                   onChange={onChange}
                   placeholder={t('')}
-                  error={Boolean(errors.password)}
-                  {...(errors.password && { helperText: errors.password.message })}
-                />
-                
+                  error={Boolean(errors.status)}
+                  {...(errors.status && { helperText: errors.status.message })}
+                >
+                  <MenuItem value="Active">{t('Active')}</MenuItem>
+                  <MenuItem value="Inactive">{t('Inactive')}</MenuItem>
+                </CustomTextField>
               </Box>
             )}
           />
@@ -271,7 +274,7 @@ const AddRoleDrawer = ({ open, toggle }) => {
                     <Box>
                       {t('Module Name')} <span className='text-red-500 font-bold'>*</span>
                     </Box>
-                  )} 
+                  )}
                   onChange={onChange}
                   placeholder={t('')}
                   error={Boolean(errors.confirmPassword)}
@@ -279,7 +282,7 @@ const AddRoleDrawer = ({ open, toggle }) => {
                 />
               </Box>
             )}
-          />        
+          />
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button type='submit' variant='outlined' sx={{ mr: 3 }}>
               {mutation.isPending ? t('Loading...') : t('Save')}

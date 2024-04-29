@@ -13,7 +13,7 @@ const VerticalNavbar = () => {
 
   const [activeItem, setActiveItem] = useState(localStorage.getItem('activeNav') || 1) // Initially set the active item to the first one
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [selectedLanguage, setSelectedLanguage] = useState('EN')
+  const [selectedLanguage, setSelectedLanguage] = useState('en')
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -45,6 +45,11 @@ const VerticalNavbar = () => {
     setActiveItem(itemId)
     setNav(false) // Close the mobile menu after clicking on an item
   }
+
+  useEffect(()=>{
+    const lang = localStorage.getItem('language')
+    setSelectedLanguage(lang)
+  },[])
 
   const navItems = [
     { id: 1, text: 'Home', link: '/portfolio/home' },
