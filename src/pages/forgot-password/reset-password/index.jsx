@@ -110,15 +110,62 @@ const ResetPasswordV2 = () => {
   }
 
   const payload = JSON.parse(localStorage.getItem('forgotPassCredentials'))
+  console.log("userId", payload.userId);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    const token = JSON.parse(localStorage.getItem('forgetPassCredentials')).userId
+    console.log("token",token)
+    if(token){
+      const {userId} = JSON.parse(token)
+      console.log("userId", userId);
+    }
 
+    if(!token) router.replace('/login')
+  }, [])
+ 
   const s = t('Success')
 
   async function handelSubmit(e) {
     e.preventDefault()
+
+    const { newPassword, confirmNewPassword, OTP } = values
+    
+    if (!OTP || OTP.length < 6) {
+      return setErrMsg('Please enter a valid OTP')
+    }
+
+    if (newPassword.length < 6) {
+      return setErrMsg('Password must be atleast 6 characters long')
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      return setErrMsg('Password are not matching')
+    }
+
+    setErrMsg('')
+
+    try {
+      setLoading(true)
+
+      await axios.post(
+        baseURL + '/Users/users.resetpasswordasync',
+        {
+          email: payload.email,
+          token: payload.userId,
+          otp: OTP,
+          password: newPassword
+        }
+      )
+
+      localStorage.removeItem('forgotPassCredentials')
+      toast.success(s)
+      router.push('/login')
+    } catch (error) {
+      console.log(error)
+      toast.error('Error reseting password')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -166,7 +213,7 @@ const ResetPasswordV2 = () => {
               </Typography>
 
               <Typography component='span' sx={{ ml: 1, fontWeight: 500 }}>
-                {t('Please check your email for') + ' ' + 'OPT'}
+                {t('Please check your email for') + ' ' + 'OTP'}
               </Typography>
               {errMsg && (
                 <Typography component='span' color='red' sx={{ ml: 1, fontWeight: 500 }}>

@@ -202,7 +202,6 @@ const UserList = ({ apiData }) => {
       console.log(data.data.data)
 
       // setAllUsers(data.data.data)
-
       if (data?.data?.data) {
         setUsersToShow(data?.data?.data)
       } else {

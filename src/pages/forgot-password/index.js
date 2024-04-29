@@ -24,6 +24,8 @@ import { useTranslation } from 'react-i18next'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { baseURL } from 'src/Constants/Constants'
+import axios from 'axios'
 
 const RightWrapper = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -61,9 +63,27 @@ const ForgotPassword = () => {
 
   const [loading, setLoading] = useState(false)
 
+  const [error, setError] = useState(null)
+
   const f = t('No User found with this Email')
 
-  async function handleSubmit(e) {}
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setLoading(true)
+
+    try {
+      const response = await axios.post(`${baseURL}/Users/users.forgotpasswordasync`, { email })
+      localStorage.setItem('forgotPassCredentials', JSON.stringify(response.data?.data))
+      console.log("response", response);
+
+      router.push("/forgot-password/reset-password")
+
+    } catch (error) {
+      console.error('Error sending reset link:', error);
+      setError(t('Failed to send reset link. Please try again.'));
+    }
+    setLoading(false)
+  }
 
   return (
     <Box className='content-right' sx={{ backgroundColor: 'background.paper' }}>

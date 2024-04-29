@@ -98,12 +98,12 @@ const Register = () => {
       )
       console.log("register", res.data)
 
-      // localStorage.setItem(
-      //   'userInfo',
-      //   JSON.stringify({ userId: res.data.data, userEmail: data.email, userPassword: data.password })
-      // )
+      localStorage.setItem(
+        'userInfo',
+        JSON.stringify({ userId: res.data, userEmail: data.email, userPassword: data.password })
+      )
 
-      // router.push('/enterOTP')
+      router.push('/enterOTP')
 
       // await auth.login({email:data.email , password:data.password}, () => toast.error('Login failed'))
     } catch (error) {

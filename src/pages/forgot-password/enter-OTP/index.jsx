@@ -203,7 +203,28 @@ const TwoStepsV2 = () => {
     }
   }
 
-  async function verifyOTP(data) {}
+  async function verifyOTP(data) {
+    const OTP = Object.values(data).join('')
+
+    try {
+      setLoading(true)
+      await axios.get(baseURL + '/Users/users.confirmemailofuserasync', {
+        params: { tenant: 'root', userId: userData.userId, code: OTP }
+      })
+
+      toast.success('Verification Success')
+
+      await auth.login({ email: userData.userEmail, password: userData.userPassword }, () => {
+        localStorage.removeItem('userInfo')
+        router.push('/login')
+      })
+    } catch (error) {
+      console.log(error)
+      toast.error('Verification Failed')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <Box className='content-right' sx={{ backgroundColor: 'background.paper' }}>

@@ -217,13 +217,14 @@ const TwoStepsV2 = () => {
 
     try {
       setLoading(true)
-      await axios.get(baseURL + '/users/users.confirmemailofuserasync', {
-        params: { tenant: 'root', userId: userData.userId, code: OTP }
+      await axios.get(baseURL + '/Users/users.confirmemailofuserasync', {
+        params: { tenant: 'root', userId: userData.userId.data, code: OTP }
       })
 
       toast.success('Verification Success')
 
       await auth.login({ email: userData.userEmail, password: userData.userPassword }, () => {
+        localStorage.removeItem('userInfo')
         router.push('/login')
       })
     } catch (error) {
@@ -270,6 +271,7 @@ const TwoStepsV2 = () => {
             <Image
               alt='company logo'
               src={theme.palette.mode === 'dark' ? '/portfolioImages/logo.svg' : '/portfolioImages/logo.svg'}
+              height={180}
               width={180}
             />
             <Box sx={{ my: 6 }}>

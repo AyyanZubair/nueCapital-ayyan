@@ -249,14 +249,14 @@ const Roles = () => {
             <DataGrid
               autoHeight
               rowHeight={62}
-              rows={
+              rows={ rolesToShow.length > 0 ?
                 rolesToShow?.map(el => ({
                   ...el,
                   editFn: data => {
                     setItemToEdit(data)
                     setEditRoleOpen(true)
                   }
-                })) || []
+                })) : []
               }
               loading={dLoading}
               loadingOverlayComponent={<CircularProgress />}
