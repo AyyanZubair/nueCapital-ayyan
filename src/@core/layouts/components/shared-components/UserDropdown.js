@@ -83,7 +83,9 @@ const UserDropdown = props => {
     handleDropdownClose()
   }
 
-  const fullName = 'Hassan Ali'
+
+  const fullName = "Hassan Ali"
+
 
   return (
     <Fragment>
