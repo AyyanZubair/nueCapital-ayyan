@@ -16,21 +16,21 @@ const navigation = () => {
       icon: 'tabler:user',
       title: 'Management',
       role: 'admin',
-      children:[
+      children: [
         {
-          title:'User Management',
-          path:'/admin/user-management',
-          role:'admin'
+          title: 'User Management',
+          path: '/admin/user-management',
+          role: 'admin'
         },
         {
-          title:'Roles Management',
-          path:'/admin/roles',
-          role:'admin'
+          title: 'Roles Management',
+          path: '/admin/roles',
+          role: 'admin'
         },
         {
-          title:"Permissions Management",
-          path:'/admin/permissions',
-          role:'admin'
+          title: 'Permissions Management',
+          path: '/admin/permissions',
+          role: 'admin'
         }
       ]
     }
@@ -38,3 +38,5 @@ const navigation = () => {
 }
 
 export default navigation
+
+//
