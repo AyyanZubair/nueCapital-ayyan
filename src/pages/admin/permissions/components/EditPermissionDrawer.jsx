@@ -315,10 +315,10 @@ const AddRoleDrawer = ({ open, toggle, data }) => {
             <CustomTextField
               fullWidth
               label={(
-                <Box>
-                  {t('Phone no')} <span className='text-red-500 font-bold'>*</span>
-                </Box>
-              )} 
+                    <Box>
+                      {t('Phone Number')} <span className='text-red-500 font-bold'>*</span>
+                    </Box>
+                  )} 
               value={userData.phoneNumber}
               onChange={e => setUserData(p => ({ ...p, phoneNumber: e.target.value }))}
               placeholder={t('Phone Number')}

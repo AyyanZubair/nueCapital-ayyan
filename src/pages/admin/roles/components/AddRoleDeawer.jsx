@@ -137,7 +137,11 @@ const AddRoleDrawer = ({ open, toggle }) => {
                 fullWidth
                 value={value}
                 sx={{ mb: 4 }}
-                label={t('Role')}
+                label={(
+                  <Box>
+                    {t('Role')} <span className='text-red-500 font-bold'>*</span>
+                  </Box>
+                )} 
                 onChange={onChange}
                 placeholder='admin'
                 error={Boolean(errors.roleName)}
@@ -154,7 +158,11 @@ const AddRoleDrawer = ({ open, toggle }) => {
                 fullWidth
                 value={value}
                 sx={{ mb: 4 }}
-                label={t('Role Description')}
+                label={(
+                  <Box>
+                    {t('Role Description')} <span className='text-red-500 font-bold'>*</span>
+                  </Box>
+                )} 
                 onChange={onChange}
                 placeholder={t('description')}
                 error={Boolean(errors.roleDescription)}

@@ -36,6 +36,7 @@ import { baseURL } from 'src/Constants/Constants'
 import toast from 'react-hot-toast'
 import { useAuth } from 'src/hooks/useAuth'
 import { useRouter } from 'next/router'
+import {  CircularProgress } from '@mui/material';
 
 const RightWrapper = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -266,7 +267,7 @@ const Register = () => {
                 disabled={loading}
                 className='bg-[#24C6B7] text-white text-center py-2 w-full rounded-md hover:bg-opacity-80 disabled:bg-gray-500 mb-5'
               >
-                {t('Register')}
+                {loading ? <CircularProgress size={18} color="inherit" /> : t('Register')}
               </Button>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography sx={{ color: 'text.secondary', mr: 2 }}>{t('Already have an account?')}</Typography>

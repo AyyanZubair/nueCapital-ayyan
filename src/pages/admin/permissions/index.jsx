@@ -1,133 +1,271 @@
-import React, { useState } from 'react';
-import HomeIcon from '@mui/icons-material/Home';
-import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import { InputAdornment, FormControlLabel, Switch } from '@mui/material';
-import ImportExportIcon from '@mui/icons-material/ImportExport';
-import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react'
+import Card from '@mui/material/Card'
+import Menu from '@mui/material/Menu'
+import Grid from '@mui/material/Grid'
+import MenuItem from '@mui/material/MenuItem'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
+import { DataGrid } from '@mui/x-data-grid'
+import Icon from 'src/@core/components/icon'
 
-const Permissions = () => {
-    const [menuName, setMenuName] = useState('');
-    const [actionName, setActionName] = useState('');
-    const [status, setStatus] = useState('');
-    const [menuUrl, setMenuUrl] = useState('');
-    const [apiUrl, setApiUrl] = useState('');
-    const [moduleName, setModuleName] = useState('');
-    const [permissions, setPermissions] = useState([]);
-    const [lastUpdate, setLastUpdate] = useState('Last update: 1 year ago');
-    const currentTime = new Date().toLocaleString();
+import TableHeader from './components/TableHeader'
+import AddUserDrawer from './components/AddPermissionDrawer'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { CircularProgress } from '@mui/material'
+import EditUserDrawer from './components/EditPermissionDrawer'
+import Tooltip from '@mui/material/Tooltip'
 
-    const handleAddPermission = () => {
-        const newPermission = {
-            menuName,
-            actionName,
-            status,
-            menuUrl,
-            apiUrl,
-            moduleName
-        };
-        setPermissions([...permissions, newPermission]);
-        // Reset input fields after adding permission
-        setMenuName('');
-        setActionName('');
-        setStatus('');
-        setMenuUrl('');
-        setApiUrl('');
-        setModuleName('');
-        // Update last update time
-        setLastUpdate(`Last update: ${new Date().toLocaleDateString()}`);
-    };
+// ** Custom Components Imports
+import CustomChip from 'src/@core/components/mui/chip'
+import toast from 'react-hot-toast'
+import UserModal from './components/PermissionModal'
+import { t } from 'i18next'
+import useAPI from 'src/hooks/useNewApi'
+import axios from 'axios'
+import { baseURL } from 'src/Constants/Constants'
 
-    // Function to toggle row expansion
-    const toggleRowExpansion = (index) => {
-        const updatedPermissions = permissions.map((permission, i) => {
-            if (i === index) {
-                return { ...permission, expanded: !permission.expanded };
-            }
-            return permission;
-        });
-        setPermissions(updatedPermissions);
-    };
+const RowOptions = ({ data }) => {
+  const [anchorEl, setAnchorEl] = useState(null)
+  const rowOptionsOpen = Boolean(anchorEl)
+  const api = useAPI()
 
-    const router = useRouter()
+  // query
 
-    const handleClick = () => {
-        router.push("/admin/permissions/addNewPermission")
+  const handleRowOptionsClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleRowOptionsClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleDelete = id => {
+    const confirm = window.confirm(t('Confirm delete user') + ` : ${data?.firstName + ' ' + data.lastName}`)
+    if (confirm) {
+      mutation.mutate(id)
+    } else {
+      handleRowOptionsClose()
     }
+  }
 
-    return (
-        <div>
-            <div className="content my-6">
-                <h2 className='text-3xl'>Permission Management</h2>
-                <div className='flex gap-2'>
-                    <EventNoteIcon />
-                    <p>{lastUpdate}</p>
-                </div>
-                <input className='my-4 border rounded-full' type="search" placeholder='search keyword' />
+  return (
+    <>
+      <IconButton size='small' onClick={handleRowOptionsClick}>
+        <Icon icon='tabler:dots-vertical' />
+      </IconButton>
+      <Menu
+        keepMounted
+        anchorEl={anchorEl}
+        open={rowOptionsOpen}
+        onClose={handleRowOptionsClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right'
+        }}
+        PaperProps={{ style: { minWidth: '8rem' } }}
+      >
+        <MenuItem
+          onClick={() => {
+            handleRowOptionsClose()
+            data.editFn(data)
+          }}
+          sx={{ '& svg': { mr: 2 } }}
+        >
+          <Icon icon='tabler:edit' fontSize={20} />
+          {t('Edit')}
+        </MenuItem>
+        <MenuItem onClick={() => handleDelete(data.id)} sx={{ '& svg': { mr: 2 } }}>
+          <Icon icon='tabler:trash' fontSize={20} />
+          {mutation.isPending ? t('Deleting') : t('Delete')}
+        </MenuItem>
+      </Menu>
+    </>
+  )
+}
 
-                {/* New Permission Section */}
-                <div className="new-permission my-6 border border-[#033329] rounded-[1.6rem] overflow-hidden">
-                    {/* Form Inputs */}
-                    {/* Add your form inputs here */}
-                </div>
+const columns = [
+  {
+    flex: 0.25,
+    minWidth: 280,
+    field: 'firstName',
+    headerName: t('User Name'),
+    renderCell: ({ row }) => <UserModal row={row} />
+  },
+  {
+    flex: 0.15,
+    field: 'isActive',
+    minWidth: 170,
+    headerName: t('Active'),
+    renderCell: ({ row }) => {
+      return (
+        <CustomChip
+          rounded
+          skin='light'
+          size='small'
+          label={row.isActive ? t('Active') : t('Inactive')}
+          color={row.isActive ? 'success' : 'warning'}
+          sx={{ textTransform: 'capitalize' }}
+        />
+      )
+    }
+  },
+  {
+    flex: 0.15,
+    minWidth: 120,
+    headerName: t('Verified'),
+    field: 'emailConfirmed',
+    renderCell: ({ row }) => {
+      return (
+        <Typography
+          noWrap
+          sx={{
+            color: row.emailConfirmed ? theme => theme.palette.success.main : theme => theme.palette.error.main,
+            marginLeft: '15px'
+          }}
+        >
+          <Icon icon={row.emailConfirmed ? 'tabler:shield-check' : 'tabler:shield-x'} fontSize={24} />
+        </Typography>
+      )
+    }
+  },
+  {
+    flex: 0.15,
+    minWidth: 190,
+    field: 'roles[0].roleName',
+    headerName: t('Role'),
+    renderCell: ({ row }) => {
+      return (
+        <Typography noWrap sx={{ color: 'text.secondary' }}>
+          {row?.roles.map((role, index) => (
+            <Tooltip key={index} title={row?.roles?.map(r => r.roleName).join(', ')}>
+              <span style={{ display: 'inline' }}>
+                {t(role.roleName)}
+                {index < row.roles.length - 1 && ', '}
+              </span>
+            </Tooltip>
+          ))}
+        </Typography>
+      )
+    }
+  },
 
-                {/* Table */}
-                <table className="table-auto w-full">
-                    <thead>
-                        <tr>
-                            <th>Menu Name <ImportExportIcon /></th>
-                            <th>Menu URL <ImportExportIcon /></th>
-                            <th>API URL <ImportExportIcon /></th>
-                            <th>Status</th>
-                            <th>Data Modified <ImportExportIcon /></th>
-                            <th></th> 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {permissions.length === 0 ? (
-                            <tr>
-                                <div>
-                                    <td colSpan="6">911 Alert Processing</td>
-                                </div>
-                                
-                            </tr>
-                        ) : (
-                            permissions.map((permission, index) => (
-                                <React.Fragment key={index}>
-                                    <tr onClick={() => toggleRowExpansion(index)}>
-                                        <td>{permission.menuName}</td>
-                                        <td>{permission.menuUrl}</td>
-                                        <td>{permission.apiUrl}</td>
-                                        <td>{permission.status}</td>
-                                        <td>{permission.dataModified}</td>
-                                        <td>{permission.expanded ? '-' : '+'}</td>
-                                    </tr>
-                                    {permission.expanded && (
-                                        <tr>
-                                            <td colSpan="6"> {/* Colspan to span across all columns */}
-                                                {/* Expanded content */}
-                                                {/* Add your expanded content here */}
-                                            </td>
-                                        </tr>
-                                    )}
-                                </React.Fragment>
-                            ))
-                        )}
-                    </tbody>
+  {
+    flex: 0.1,
+    minWidth: 100,
+    sortable: false,
+    field: 'actions',
+    headerName: t('Actions'),
+    renderCell: ({ row }) => (
+      <div className='flex items-center gap-4'>
+        <button onClick={() => row.editFn(row)}>
+          <Icon icon='tabler:edit' />
+        </button>
+        <button onClick={() => row.delFn(row.id)}>
+          <Icon icon='tabler:trash' />
+        </button>
+      </div>
+    )
+  }
+]
 
-                </table>
+const UserList = () => {
+  const api = useAPI()
 
-                {/* Button to Add New Permission */}
-                <div className='flex justify-end'>
-                    <button
-                        onClick={handleClick}
-                        className="add-permission-btn bg-[#033329] text-white text-md px-4 py-1 rounded-full"
-                    >+ Add New Permission</button>
-                </div>
+  const [addUserOpen, setAddUserOpen] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
+  const [usersToShow, setUsersToShow] = useState([])
+  const [itemToEdit, setItemToEdit] = useState(null)
+  const [openEditUser, setOpenEditUser] = useState(false)
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
 
-            </div>
-        </div>
-    );
-};
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ['users'],
+    queryFn: () => api.get('/Users/users.getlistofallusersasync')
+  })
 
-export default Permissions;
+  useEffect(() => {
+    if (data) {
+      console.log(data.data.data)
+
+      // setAllUsers(data.data.data)
+      if (data?.data?.data) {
+        setUsersToShow(data?.data?.data)
+      } else {
+        setUsersToShow([])
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
+
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationKey: ['deleteUser'],
+    mutationFn: id => api.post(`/users/user.deleteuserasync`, {}, { params: { id } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['users'])
+      toast.success('User Deleted')
+    },
+    onError: errors => {
+      console.log(errors)
+      handleRowOptionsClose()
+      toast.error('Request Failed')
+    }
+  })
+
+  return (
+    <Grid container spacing={6.5}>
+      <Grid item xs={12}>
+        <Card>
+          <TableHeader
+            value={searchValue}
+            handleFilter={val => setSearchValue(val)}
+            toggle={() => setAddUserOpen(p => !p)}
+          />
+
+          {isError ? (
+            <div className='text-center w-full py-5'>{t('Something went wrong! Please try again.')}</div>
+          ) : (
+            <DataGrid
+              autoHeight
+              rowHeight={62}
+              rows={
+                usersToShow.length > 0
+                  ? usersToShow
+                      ?.filter(u => u.fullName.toLowerCase().includes(searchValue.toLowerCase()))
+                      .map(el => ({
+                        ...el,
+                        editFn: data => {
+                          setItemToEdit(data)
+                          setOpenEditUser(true)
+                        },
+                        delFn: id => {
+                          const confirm = window.confirm('Cofirm delete user?')
+                          if (confirm) mutation.mutate(id)
+                        }
+                      }))
+                  : []
+              }
+              columns={columns}
+              loading={isLoading}
+              loadingOverlayComponent={<CircularProgress />}
+              disableRowSelectionOnClick
+              pageSizeOptions={[10, 25, 50]}
+              paginationModel={paginationModel}
+              onPaginationModelChange={setPaginationModel}
+            />
+          )}
+        </Card>
+      </Grid>
+
+      <AddUserDrawer open={addUserOpen} toggle={() => setAddUserOpen(p => !p)} />
+      <EditUserDrawer open={openEditUser} toggle={() => setOpenEditUser(p => !p)} data={itemToEdit} />
+    </Grid>
+  )
+}
+
+export default UserList

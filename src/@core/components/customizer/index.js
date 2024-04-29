@@ -182,7 +182,7 @@ const Customizer = () => {
                 <ColorBox
                   onClick={() => handleChange('themeColor', 'secondary')}
                   sx={{
-                    backgroundColor: 'secondary.main',
+                    backgroundColor: '#B2BEB5',
                     ...(themeColor === 'secondary'
                       ? { width: 53, height: 53, m: theme => theme.spacing(1.5, 0.75, 0) }
                       : {})

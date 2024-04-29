@@ -15,6 +15,7 @@ import MuiFormControlLabel from '@mui/material/FormControlLabel'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@mui/material'
 import { logo } from '../../../public/portfolioImages/logo.svg'
+import {  CircularProgress } from '@mui/material';
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -232,8 +233,10 @@ const LoginPage = () => {
                 disabled={loading}
                 className={`bg-[${theme.palette.primary.main.toString()}] text-white text-center py-2 w-full rounded-md hover:bg-opacity-80 disabled:bg-gray-500 mb-5`}
                 sx={{ mb: 4 }}
+                
               >
-                {t('Login')}
+                {loading ? <CircularProgress size={18} color="inherit" /> : t('Login')}
+                
               </Button>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography sx={{ color: 'text.secondary', mr: 2 }}>{t('New on our platform?')}</Typography>
