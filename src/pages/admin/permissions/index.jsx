@@ -9,10 +9,10 @@ import { DataGrid } from '@mui/x-data-grid'
 import Icon from 'src/@core/components/icon'
 
 import TableHeader from './components/TableHeader'
-import AddUserDrawer from './components/AddPermissionDrawer'
+import AddPermissionDrawer from './components/AddPermissionDrawer'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CircularProgress } from '@mui/material'
-import EditUserDrawer from './components/EditPermissionDrawer'
+import EditPermissionDrawer from './components/EditPermissionDrawer'
 import Tooltip from '@mui/material/Tooltip'
 
 // ** Custom Components Imports
@@ -94,7 +94,11 @@ const columns = [
     field: 'menuName',
     headerName: t('Menu Name'),
     renderCell: ({ row }) => {
-      return <Typography>{row.menuName}</Typography>
+      return (
+        <Typography>
+          {row.menuName}
+        </Typography>
+      );
     }
   },
   {
@@ -102,9 +106,14 @@ const columns = [
     field: 'menuURL',
     minWidth: 170,
     headerName: t('Menu URL'),
-    renderCell: ({ row }) => {
-      return <Typography>{row.menuURL}</Typography>
-    }
+    renderCell: ({row}) => {
+
+      return (
+        <Typography>
+          {row.menuURL}
+        </Typography>
+      );
+    },
   },
   {
     flex: 0.15,
@@ -112,7 +121,13 @@ const columns = [
     headerName: t('API URL'),
     field: 'apiURL',
     renderCell: ({ row }) => {
-      return <Typography noWrap>{row.apiURL}</Typography>
+      return (
+        <Typography
+          noWrap
+        >
+          {row.apiURL}
+        </Typography>
+      )
     }
   },
   {
@@ -135,7 +150,11 @@ const columns = [
     sortable: false,
     field: 'date modified',
     headerName: t('Date Modified'),
-    renderCell: ({ row }) => <div className='flex items-center gap-4'>{row.dateModified}</div>
+    renderCell: ({ row }) => (
+      <div className='flex items-center gap-4'>
+        {row.dateModified}
+      </div>
+    )
   },
   {
     flex: 0.1,
@@ -156,7 +175,7 @@ const columns = [
   }
 ]
 
-const UserList = () => {
+const PermissionList = () => {
   const api = useAPI()
 
   const [addUserOpen, setAddUserOpen] = useState(false)
@@ -176,33 +195,33 @@ const UserList = () => {
       id: 1,
       menuName: 'Dashboard',
       menuURL: '/admin/dashboard',
-      apiURL: 'api/dashboard',
+      apiURL: '/api/dashboard',
       status: 'Active',
-      dateModified: '2023-04-01'
+      dateModified: '2023-04-01',
     },
     {
       id: 2,
       menuName: 'User-Managment',
       menuURL: '/admin/user-managment',
-      apiURL: 'api/user-managment',
+      apiURL: '/api/user-managment',
       status: 'Active',
-      dateModified: '2023-04-02'
+      dateModified: '2023-04-02',
     },
     {
       id: 3,
       menuName: 'Roles',
       menuURL: '/admin/roles',
-      apiURL: 'api/roles',
+      apiURL: '/api/roles',
       status: 'Active',
-      dateModified: '2023-04-02'
+      dateModified: '2023-04-02',
     }
-  ]
+
+  ];
 
   useEffect(() => {
     if (permissionsData) {
       setUsersToShow(permissionsData)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const queryClient = useQueryClient()
@@ -241,18 +260,18 @@ const UserList = () => {
               rows={
                 permissionsData.length > 0
                   ? permissionsData
-                      ?.filter(permission => permission.menuName.toLowerCase().includes(searchValue.toLowerCase()))
-                      .map(permission => ({
-                        ...permission,
-                        editFn: data => {
-                          setItemToEdit(data)
-                          setOpenEditUser(true)
-                        },
-                        delFn: id => {
-                          const confirm = window.confirm('Cofirm delete user?')
-                          if (confirm) mutation.mutate(id)
-                        }
-                      }))
+                    ?.filter(permission => permission.menuName.toLowerCase().includes(searchValue.toLowerCase()))
+                    .map(permission => ({
+                      ...permission,
+                      editFn: data => {
+                        setItemToEdit(data)
+                        setOpenEditUser(true)
+                      },
+                      delFn: id => {
+                        const confirm = window.confirm('Cofirm delete user?')
+                        if (confirm) mutation.mutate(id)
+                      }
+                    }))
                   : []
               }
               columns={columns}
@@ -262,14 +281,15 @@ const UserList = () => {
               paginationModel={paginationModel}
               onPaginationModelChange={setPaginationModel}
             />
+
           )}
         </Card>
       </Grid>
 
-      <AddUserDrawer open={addUserOpen} toggle={() => setAddUserOpen(p => !p)} />
-      <EditUserDrawer open={openEditUser} toggle={() => setOpenEditUser(p => !p)} data={itemToEdit} />
+      <AddPermissionDrawer open={addUserOpen} toggle={() => setAddUserOpen(p => !p)} />
+      <EditPermissionDrawer open={openEditUser} toggle={() => setOpenEditUser(p => !p)} data={itemToEdit} />
     </Grid>
   )
 }
 
-export default UserList
+export default PermissionList

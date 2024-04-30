@@ -5,37 +5,21 @@ import { styled } from '@mui/material/styles'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import CustomAvatar from 'src/@core/components/mui/avatar'
+import { FormControl } from '@mui/material'
+import { Grid, Switch } from '@mui/material'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
 
-// ** Third Party Imports
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm, Controller } from 'react-hook-form'
-
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-
 import toast from 'react-hot-toast'
-import { Switch } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { uploadImage } from 'src/utils/utils'
 import { t } from 'i18next'
 import useAPI from 'src/hooks/useNewApi'
+import { it } from 'date-fns/locale'
 import { Select, MenuItem } from '@mui/material'
-
-const showErrors = (field, valueLen, min) => {
-  if (valueLen === 0) {
-    return t(`${field} field is required`)
-  } else if (valueLen > 0 && valueLen < min) {
-    return t(`${field} must be at least ${min} characters`)
-  } else {
-    return ''
-  }
-}
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -44,98 +28,36 @@ const Header = styled(Box)(({ theme }) => ({
   justifyContent: 'space-between'
 }))
 
-const schema = yup.object().shape({
-  fullName: yup
-    .string()
-    .min(3, obj => showErrors('Menu Name', obj.value.length, obj.min))
-    .required(),
-  email: yup.string().email().required(t('API URL field is required')),
-  password: yup.string().min(6, t('Password must be at least 6 characters')).required(t('Password is required')),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], t('Passwords must match'))
-    .required(t('Module Name is required')),
-  phoneNumber: yup
-    .string()
-    .matches(/^\+(?:[0-9] ?){6,14}[0-9]$/, t('Phone number is not valid'))
-    .required(t('Phone number is required')),
-  isActive: yup.boolean().required(),
-  imageUrl: yup.string(),
-  username: yup.string().min(3, t('Menu URL field is required')).required()
-})
-
-const defaultValues = {
-  menuName: 'dashboard',
-  menuURL: '/admin/dashboard',
-  apiURL: '/api/dashboard'
-}
-
-const AddRoleDrawer = ({ data, open, toggle }) => {
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+const EditPermissionDrawer = ({ data, open, toggle, itemToEdit, refetch }) => {
+  console.log(data);
   const api = useAPI()
   const queryClient = useQueryClient()
-  const [file, setFile] = useState('')
-  const [localImageUrl, setLoacalImageUrl] = useState('')
+  const [delay, setDelay] = useState(false)
 
-  const successText = t('User Created')
-  const failText = t('Something went wrong')
+  const s = t('Success')
+  const f = t('Something went wrong')
 
-  const mutation = useMutation({
-    mutationKey: ['add-new-user'],
-    mutationFn: async data => {
-      if (file) {
-        const base64 = await uploadImage(file)
-        data.imageUrl = base64
-      }
-      await api.post('/accounts/user.account.createUser', data)
-    },
-    onSuccess: data => {
-      console.log(data)
-      queryClient.invalidateQueries(['users'])
-      reset()
-      toggle()
-      toast.success(successText)
-    },
-    onError: errors => {
-      console.log(errors)
-      setFile('')
 
-      // toggle()
-      toast.error(errors.response.data.messages[0] || failText)
-    },
-    retry: 0
-  })
+  const [menuName, setMenuName] = useState('')
+  const [menuURL, setMenuURL] = useState('')
+  const [apiURL, setApiURL] = useState('')
+  const [status, setStatus] = useState('')
 
   useEffect(() => {
-    if (file) {
-      setLoacalImageUrl(URL.createObjectURL(file))
-    } else {
-      setLoacalImageUrl('')
+    if (data) {
+      setMenuName(data.menuName)
+      setMenuURL(data.menuURL)
+      setApiURL(data.apiURL)
+      setStatus(data.status)
     }
-  }, [file])
+  }, [data])
 
-  const {
-    reset,
-    control,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
-    defaultValues,
-    mode: 'onChange',
-    resolver: yupResolver(schema)
-  })
+  const handleChange = (event) => {
+    setStatus(event.target.value);
+  };
 
-  const onSubmit = data => {
-    console.log(data)
-    mutation.mutate(data)
-  }
+  const onSubmit = () => {
 
-  const handleClose = () => {
-    setFile('')
-    setLoacalImageUrl('')
-    toggle()
-    reset()
   }
 
   return (
@@ -143,15 +65,15 @@ const AddRoleDrawer = ({ data, open, toggle }) => {
       open={open}
       anchor='right'
       variant='temporary'
-      onClose={handleClose}
-      ModalProps={{ keepMounted: false }}
+      onClose={toggle}
+      ModalProps={{ keepMounted: true }}
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
         <Typography variant='h5'>{t('Edit Permission')}</Typography>
         <IconButton
           size='small'
-          onClick={handleClose}
+          onClick={() => toggle()}
           sx={{
             p: '0.438rem',
             borderRadius: 1,
@@ -167,105 +89,76 @@ const AddRoleDrawer = ({ data, open, toggle }) => {
       </Header>
 
       <Box sx={{ p: theme => theme.spacing(0, 6, 6) }}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Controller
-            name='menuName'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label={
-                  <Box>
-                    {t('Menu Name')} <span className='text-red-500 font-bold'>*</span>
-                  </Box>
-                }
-                onChange={onChange}
-                placeholder='Menu Name'
-                error={Boolean(errors.fullName)}
-                {...(errors.fullName && { helperText: errors.fullName.message })}
-              />
-            )}
-          />
-          <Controller
-            name='menuURL'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label={
-                  <Box>
-                    {t('Menu URL')} <span className='text-red-500 font-bold'>*</span>
-                  </Box>
-                }
-                onChange={onChange}
-                placeholder={t('Menu URL')}
-                error={Boolean(errors.username)}
-                {...(errors.username && { helperText: errors.username.message })}
-              />
-            )}
-          />
-          <Controller
-            name='apiURL'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label={
-                  <Box>
-                    {t('API URL')} <span className='text-red-500 font-bold'>*</span>
-                  </Box>
-                }
-                onChange={onChange}
-                placeholder='API URL'
-                error={Boolean(errors.email)}
-                {...(errors.email && { helperText: errors.email.message })}
-              />
-            )}
-          />
-          <Controller
-            name='status'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <Box sx={{ position: 'relative' }}>
-                <CustomTextField
-                  fullWidth
-                  select
-                  value={value}
-                  sx={{ mb: 4 }}
-                  label={t('Status')}
-                  onChange={onChange}
-                  placeholder={t('')}
-                  error={Boolean(errors.status)}
-                  {...(errors.status && { helperText: errors.status.message })}
-                >
-                  <MenuItem value='Active'>{t('Active')}</MenuItem>
-                  <MenuItem value='Inactive'>{t('Inactive')}</MenuItem>
-                </CustomTextField>
-              </Box>
-            )}
-          />
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Button type='submit' variant='outlined' sx={{ mr: 3 }}>
-              {mutation.isPending ? t('Loading...') : t('Save')}
-            </Button>
-            <Button variant='tonal' color='secondary' onClick={handleClose}>
-              {t('Cancel')}
-            </Button>
+        <Box sx={{ my: 4 }}>
+          <FormControl fullWidth required>
+            <CustomTextField
+              fullWidth
+              label={t('Menu Name')}
+              value={menuName}
+              onChange={e => setMenuName(e.target.value)}
+              placeholder={t('Menu Name')}
+            />
+          </FormControl>
+        </Box>
+
+        <Box sx={{ my: 4 }}>
+          <FormControl fullWidth required>
+            <CustomTextField
+              fullWidth
+              label={t('Menu URL')}
+              value={menuURL}
+              multiline
+              onChange={e => setMenuURL(e.target.value)}
+              placeholder={t('Menu URL')}
+            />
+          </FormControl>
+        </Box>
+
+        <Box sx={{ my: 4 }}>
+          <FormControl fullWidth required>
+            <CustomTextField
+              fullWidth
+              label={t('API URL')}
+              value={apiURL}
+              multiline
+              onChange={e => setApiURL(e.target.value)}
+              placeholder={t('API URL')}
+            />
+          </FormControl>
+        </Box>
+
+        <Grid item sm={12}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <CustomTextField
+              fullWidth
+              select
+              value={status}
+              onChange={handleChange}
+              inputProps={{ 'aria-label': 'role-controlled' }}
+              label={t('Status')}
+            >
+              <MenuItem value="Active">{t('Active')}</MenuItem>
+              <MenuItem value="Inactive">{t('InActive')}</MenuItem>
+            </CustomTextField>
           </Box>
-        </form>
+        </Grid>
+
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Button
+            type='submit'
+            onClick={onSubmit}
+            variant='outlined'
+            sx={{ mr: 3 }}
+          >
+            {delay ? t('Loading...') : t('Submit')}
+          </Button>
+          <Button variant='tonal' color='secondary' onClick={toggle}>
+            {t('Cancel')}
+          </Button>
+        </Box>
       </Box>
     </Drawer>
   )
 }
 
-export default AddRoleDrawer
+export default EditPermissionDrawer

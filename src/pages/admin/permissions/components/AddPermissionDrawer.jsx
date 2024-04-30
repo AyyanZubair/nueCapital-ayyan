@@ -75,7 +75,7 @@ const defaultValues = {
   username: ''
 }
 
-const AddRoleDrawer = ({ open, toggle }) => {
+const AddPermissionDrawer = ({ open, toggle }) => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const api = useAPI()
@@ -259,30 +259,6 @@ const AddRoleDrawer = ({ open, toggle }) => {
               </Box>
             )}
           />
-          <Controller
-            name='moduleName'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <Box sx={{ position: 'relative' }}>
-                <CustomTextField
-                  fullWidth
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  value={value}
-                  sx={{ mb: 4 }}
-                  label={(
-                    <Box>
-                      {t('Module Name')} <span className='text-red-500 font-bold'>*</span>
-                    </Box>
-                  )}
-                  onChange={onChange}
-                  placeholder={t('')}
-                  error={Boolean(errors.confirmPassword)}
-                  {...(errors.confirmPassword && { helperText: errors.confirmPassword.message })}
-                />
-              </Box>
-            )}
-          />
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button type='submit' variant='outlined' sx={{ mr: 3 }}>
               {mutation.isPending ? t('Loading...') : t('Save')}
@@ -297,4 +273,4 @@ const AddRoleDrawer = ({ open, toggle }) => {
   )
 }
 
-export default AddRoleDrawer
+export default AddPermissionDrawer
