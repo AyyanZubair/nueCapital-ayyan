@@ -89,70 +89,54 @@ const RowOptions = ({ data }) => {
 
 const columns = [
   {
-    flex: 0.25,
-    minWidth: 280,
-    field: 'firstName',
-    headerName: t('User Name'),
-    renderCell: ({ row }) => <UserModal row={row} />
+    flex: 0.2,
+    minWidth: 200,
+    field: 'menuName',
+    headerName: t('Menu Name'),
+    renderCell: ({ row }) => {
+      return <Typography>{row.menuName}</Typography>
+    }
   },
   {
-    flex: 0.15,
-    field: 'isActive',
+    flex: 0.2,
+    field: 'menuURL',
     minWidth: 170,
-    headerName: t('Active'),
+    headerName: t('Menu URL'),
     renderCell: ({ row }) => {
-      return (
-        <CustomChip
-          rounded
-          skin='light'
-          size='small'
-          label={row.isActive ? t('Active') : t('Inactive')}
-          color={row.isActive ? 'success' : 'warning'}
-          sx={{ textTransform: 'capitalize' }}
-        />
-      )
+      return <Typography>{row.menuURL}</Typography>
     }
   },
   {
     flex: 0.15,
     minWidth: 120,
-    headerName: t('Verified'),
-    field: 'emailConfirmed',
+    headerName: t('API URL'),
+    field: 'apiURL',
     renderCell: ({ row }) => {
-      return (
-        <Typography
-          noWrap
-          sx={{
-            color: row.emailConfirmed ? theme => theme.palette.success.main : theme => theme.palette.error.main,
-            marginLeft: '15px'
-          }}
-        >
-          <Icon icon={row.emailConfirmed ? 'tabler:shield-check' : 'tabler:shield-x'} fontSize={24} />
-        </Typography>
-      )
+      return <Typography noWrap>{row.apiURL}</Typography>
     }
   },
   {
     flex: 0.15,
     minWidth: 190,
-    field: 'roles[0].roleName',
-    headerName: t('Role'),
+    field: 'status',
+    headerName: t('Status'),
     renderCell: ({ row }) => {
       return (
         <Typography noWrap sx={{ color: 'text.secondary' }}>
-          {row?.roles.map((role, index) => (
-            <Tooltip key={index} title={row?.roles?.map(r => r.roleName).join(', ')}>
-              <span style={{ display: 'inline' }}>
-                {t(role.roleName)}
-                {index < row.roles.length - 1 && ', '}
-              </span>
-            </Tooltip>
-          ))}
+          {row.status}
         </Typography>
       )
     }
   },
 
+  {
+    flex: 0.15,
+    minWidth: 100,
+    sortable: false,
+    field: 'date modified',
+    headerName: t('Date Modified'),
+    renderCell: ({ row }) => <div className='flex items-center gap-4'>{row.dateModified}</div>
+  },
   {
     flex: 0.1,
     minWidth: 100,
@@ -182,24 +166,44 @@ const UserList = () => {
   const [openEditUser, setOpenEditUser] = useState(false)
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
 
-  const { data, isError, isLoading } = useQuery({
-    queryKey: ['users'],
-    queryFn: () => api.get('/Users/users.getlistofallusersasync')
-  })
+  // const { data, isError, isLoading } = useQuery({
+  //   queryKey: ['users'],
+  //   queryFn: () => api.get('/Users/users.getlistofallusersasync')
+  // })
+
+  const permissionsData = [
+    {
+      id: 1,
+      menuName: 'Dashboard',
+      menuURL: '/admin/dashboard',
+      apiURL: 'api/dashboard',
+      status: 'Active',
+      dateModified: '2023-04-01'
+    },
+    {
+      id: 2,
+      menuName: 'User-Managment',
+      menuURL: '/admin/user-managment',
+      apiURL: 'api/user-managment',
+      status: 'Active',
+      dateModified: '2023-04-02'
+    },
+    {
+      id: 3,
+      menuName: 'Roles',
+      menuURL: '/admin/roles',
+      apiURL: 'api/roles',
+      status: 'Active',
+      dateModified: '2023-04-02'
+    }
+  ]
 
   useEffect(() => {
-    if (data) {
-      console.log(data.data.data)
-
-      // setAllUsers(data.data.data)
-      if (data?.data?.data) {
-        setUsersToShow(data?.data?.data)
-      } else {
-        setUsersToShow([])
-      }
+    if (permissionsData) {
+      setUsersToShow(permissionsData)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [])
 
   const queryClient = useQueryClient()
 
@@ -216,6 +220,7 @@ const UserList = () => {
       toast.error('Request Failed')
     }
   })
+  let isError = false
 
   return (
     <Grid container spacing={6.5}>
@@ -234,11 +239,11 @@ const UserList = () => {
               autoHeight
               rowHeight={62}
               rows={
-                usersToShow.length > 0
-                  ? usersToShow
-                      ?.filter(u => u.fullName.toLowerCase().includes(searchValue.toLowerCase()))
-                      .map(el => ({
-                        ...el,
+                permissionsData.length > 0
+                  ? permissionsData
+                      ?.filter(permission => permission.menuName.toLowerCase().includes(searchValue.toLowerCase()))
+                      .map(permission => ({
+                        ...permission,
                         editFn: data => {
                           setItemToEdit(data)
                           setOpenEditUser(true)
@@ -251,7 +256,6 @@ const UserList = () => {
                   : []
               }
               columns={columns}
-              loading={isLoading}
               loadingOverlayComponent={<CircularProgress />}
               disableRowSelectionOnClick
               pageSizeOptions={[10, 25, 50]}

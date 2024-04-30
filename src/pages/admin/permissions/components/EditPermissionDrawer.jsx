@@ -5,27 +5,37 @@ import { styled } from '@mui/material/styles'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import { FormControl } from '@mui/material'
-import { Grid, Switch } from '@mui/material'
-import Chip from '@mui/material/Chip'
-import MenuItem from '@mui/material/MenuItem'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
 
+// ** Third Party Imports
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm, Controller } from 'react-hook-form'
+
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+
 import toast from 'react-hot-toast'
+import { Switch } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import InputLabel from '@mui/material/InputLabel'
-import Select from '@mui/material/Select'
-import { checkValidation, uploadImage } from '../../../../utils/utils'
+import { uploadImage } from 'src/utils/utils'
 import { t } from 'i18next'
 import useAPI from 'src/hooks/useNewApi'
+import { Select, MenuItem } from '@mui/material'
+
+const showErrors = (field, valueLen, min) => {
+  if (valueLen === 0) {
+    return t(`${field} field is required`)
+  } else if (valueLen > 0 && valueLen < min) {
+    return t(`${field} must be at least ${min} characters`)
+  } else {
+    return ''
+  }
+}
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -34,205 +44,114 @@ const Header = styled(Box)(({ theme }) => ({
   justifyContent: 'space-between'
 }))
 
-const ITEM_HEIGHT = 48
-const ITEM_PADDING_TOP = 8
+const schema = yup.object().shape({
+  fullName: yup
+    .string()
+    .min(3, obj => showErrors('Menu Name', obj.value.length, obj.min))
+    .required(),
+  email: yup.string().email().required(t('API URL field is required')),
+  password: yup.string().min(6, t('Password must be at least 6 characters')).required(t('Password is required')),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], t('Passwords must match'))
+    .required(t('Module Name is required')),
+  phoneNumber: yup
+    .string()
+    .matches(/^\+(?:[0-9] ?){6,14}[0-9]$/, t('Phone number is not valid'))
+    .required(t('Phone number is required')),
+  isActive: yup.boolean().required(),
+  imageUrl: yup.string(),
+  username: yup.string().min(3, t('Menu URL field is required')).required()
+})
 
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250
-    }
-  }
+const defaultValues = {
+  menuName: 'dashboard',
+  menuURL: '/admin/dashboard',
+  apiURL: '/api/dashboard'
 }
 
-const dataTemplate = {
-  fullName: '',
-  imageUrl: '',
-  email: '',
-  phoneNumber: '',
-  isActive: '',
-  userRoles: []
-}
-
-// ! start
-
-const AddRoleDrawer = ({ open, toggle, data }) => {
+const AddRoleDrawer = ({ data, open, toggle }) => {
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const api = useAPI()
-  const [errorMsg, setErrorMsg] = useState('')
-  const [userData, setUserData] = useState(dataTemplate)
   const queryClient = useQueryClient()
-  const [delay, setDelay] = useState(false)
-
-  // ! image handling
-
   const [file, setFile] = useState('')
   const [localImageUrl, setLoacalImageUrl] = useState('')
 
-  // todo her
-  const [role, setrole] = useState([])
-
-  const handleselectRole = value => {
-    const updatedRoles = value?.map(role => {
-      if (role?.enabled === false) {
-        role.enabled = true
-      }
-
-      return role
-    })
-
-    setrole(updatedRoles)
-  }
-
-  const handleDelete = deletedRole => event => {
-    event.preventDefault()
-    const updatedRoles = role?.filter(r => r.roleId !== deletedRole.roleId)
-    setrole(updatedRoles)
-  }
-
-  // todo  her
-
-  // const { data: rolesList } = useQuery({
-  //   queryKey: ['roles'],
-  //   queryFn: () => api.get('/roles/roles.getlistofrolesasync')
-  // })
-  let rolesList = []
-
-  const successText = t('Updated')
-  const failText = t('User Update Failed')
+  const successText = t('User Created')
+  const failText = t('Something went wrong')
 
   const mutation = useMutation({
-    mutationKey: ['updateUser'],
-    mutationFn: async uploadData => {
-      setDelay(true)
+    mutationKey: ['add-new-user'],
+    mutationFn: async data => {
       if (file) {
         const base64 = await uploadImage(file)
-        uploadData.imageUrl = base64
+        data.imageUrl = base64
       }
-
-      if (!data?.roles?.some(role => role.roleName.toLowerCase() === 'admin')) {
-        await api.post(
-          '/users/users.toggleuserstatusasync',
-          {
-            activateUser: uploadData.userRoles.some(role => role.enabled && role.roleName.toLowerCase() === 'admin')
-              ? true
-              : uploadData.isActive,
-            userId: uploadData.id
-          },
-          { params: { id: uploadData.id } }
-        )
-      } else {
-        uploadData.isActive = true
-      }
-
-      await api.post('/users/user.updateuserasync', uploadData, { params: { id: uploadData.id } })
+      await api.post('/accounts/user.account.createUser', data)
     },
-    onSuccess: () => {
-      setTimeout(() => {
-        queryClient.invalidateQueries(['users', 'user'])
-        toast.success(successText)
-        setFile('')
-        setDelay(false)
-        toggle()
-      }, 1200)
+    onSuccess: data => {
+      console.log(data)
+      queryClient.invalidateQueries(['users'])
+      reset()
+      toggle()
+      toast.success(successText)
     },
     onError: errors => {
-      setDelay(false)
-      toast.error(failText)
-      toggle()
       console.log(errors)
-    }
+      setFile('')
+
+      // toggle()
+      toast.error(errors.response.data.messages[0] || failText)
+    },
+    retry: 0
   })
 
   useEffect(() => {
     if (file) {
       setLoacalImageUrl(URL.createObjectURL(file))
     } else {
-      setLoacalImageUrl(`data:image/png;base64,${data?.imageUrl}`)
+      setLoacalImageUrl('')
     }
-  }, [file, data])
+  }, [file])
 
-  // ! set initial data
+  const {
+    reset,
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    defaultValues,
+    mode: 'onChange',
+    resolver: yupResolver(schema)
+  })
 
-  useEffect(() => {
-    if (data) {
-      setUserData({
-        id: data.id,
-        fullName: data.fullName || '',
-        imageUrl: data.imageUrl || '',
-        email: data.email || '',
-        phoneNumber: data.phoneNumber || '',
-        isActive: data.isActive || '',
-        userRoles: data.roles || ''
-      })
-      setrole(data.roles)
-      setLoacalImageUrl(`data:image/png;base64,${data.imageUrl}`)
-    }
-  }, [data])
-
-  const onSubmit = () => {
-    const postData = {
-      id: userData.id,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      imageUrl: userData.imageUrl,
-      email: userData.email,
-      phoneNumber: userData.phoneNumber,
-      isActive: userData.isActive,
-      userRoles: []
-    }
-
-    const duplicateList = rolesList?.data?.data?.map(({ permissions, ...rest }) => ({
-      ...rest,
-      enabled: false
-    }))
-
-    const updatedDuplicateList = duplicateList?.map(item => {
-      const isMatchingId = role?.some(roleItem => roleItem.roleId === item.id)
-
-      if (isMatchingId) {
-        return {
-          ...item,
-          enabled: true
-        }
-      }
-
-      return item
-    })
-
-    updatedDuplicateList?.forEach(singleRole => {
-      postData.userRoles.push({
-        roleId: singleRole.id,
-        roleName: singleRole.name,
-        description: singleRole.description,
-        enabled: singleRole.enabled,
-        isActive: singleRole.isActive
-      })
-    })
-
-    mutation.mutate(postData)
+  const onSubmit = data => {
+    console.log(data)
+    mutation.mutate(data)
   }
 
-  //! validation errors
-  useEffect(() => {
-    const errorMsg = checkValidation(userData, role)
-    setErrorMsg(errorMsg)
-  }, [userData, role])
+  const handleClose = () => {
+    setFile('')
+    setLoacalImageUrl('')
+    toggle()
+    reset()
+  }
 
   return (
     <Drawer
       open={open}
       anchor='right'
       variant='temporary'
-      onClose={toggle}
-      ModalProps={{ keepMounted: true }}
+      onClose={handleClose}
+      ModalProps={{ keepMounted: false }}
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
-        <Typography variant='h5'>{t('Edit User')}</Typography>
+        <Typography variant='h5'>{t('Edit Permission')}</Typography>
         <IconButton
           size='small'
-          onClick={() => toggle()}
+          onClick={handleClose}
           sx={{
             p: '0.438rem',
             borderRadius: 1,
@@ -248,164 +167,102 @@ const AddRoleDrawer = ({ open, toggle, data }) => {
       </Header>
 
       <Box sx={{ p: theme => theme.spacing(0, 6, 6) }}>
-        <div className=' flex items-center justify-start gap-2 flex-col py-6'>
-          {localImageUrl ? (
-            <CustomAvatar src={localImageUrl} sx={{ mr: 2.5, width: 80, height: 80 }} />
-          ) : (
-            <CustomAvatar
-              skin='light'
-              sx={{
-                mr: 2.5,
-                width: 80,
-                height: 80,
-                fontWeight: 500,
-                fontSize: theme => theme.typography.body1.fontSize
-              }}
-            ></CustomAvatar>
-          )}
-
-          <input type='file' id='userImageEdit' className='hidden' onChange={e => setFile(e.target.files[0])} />
-
-          <Button
-            type='submit'
-            variant='outlined'
-            onClick={() => document.getElementById('userImageEdit').click()}
-            sx={{ mr: 3 }}
-          >
-            {t('Upload')}
-          </Button>
-        </div>
-      </Box>
-
-      <Box sx={{ p: theme => theme.spacing(0, 6, 6) }}>
-        <Box sx={{ my: 4 }}>
-          <FormControl fullWidth>
-            <CustomTextField
-              fullWidth
-              label={(
-                <Box>
-                  {t('Full Name')} <span className='text-red-500 font-bold'>*</span>
-                </Box>
-              )} 
-              value={userData.fullName}
-              onChange={e => setUserData(p => ({ ...p, fullName: e.target.value }))}
-              placeholder='Jhon Doe'
-            />
-          </FormControl>
-        </Box>
-
-        <Box sx={{ my: 4 }}>
-          <FormControl fullWidth>
-            <CustomTextField
-              fullWidth
-              label={(
-                <Box>
-                  {t('Email')} <span className='text-red-500 font-bold'>*</span>
-                </Box>
-              )} 
-              value={userData.email}
-              onChange={e => setUserData(p => ({ ...p, email: e.target.value }))}
-              placeholder='jhondoe@gmail.com'
-            />
-          </FormControl>
-        </Box>
-
-        <Box sx={{ my: 4 }}>
-          <FormControl fullWidth>
-            <CustomTextField
-              fullWidth
-              label={(
-                    <Box>
-                      {t('Phone Number')} <span className='text-red-500 font-bold'>*</span>
-                    </Box>
-                  )} 
-              value={userData.phoneNumber}
-              onChange={e => setUserData(p => ({ ...p, phoneNumber: e.target.value }))}
-              placeholder={t('Phone Number')}
-            />
-          </FormControl>
-        </Box>
-
-        <FormControl sx={{ m: 1, width: '100%' }}>
-          <InputLabel id='demo-multiple-chip-label'>{t('Role')}</InputLabel>
-          <Select
-            labelId='demo-multiple-chip-label'
-            id='demo-multiple-chip'
-            multiple
-            value={role}
-            onChange={e => handleselectRole(e.target.value)}
-            input={<OutlinedInput id='select-multiple-chip' label='Chip' />}
-            renderValue={selected => (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {selected?.map(
-                  value =>
-                    value.enabled && (
-                      <Chip
-                        key={value.roleId}
-                        label={t(value.roleName)}
-                        onMouseDown={event => {
-                          event.stopPropagation()
-                        }}
-                        onDelete={event => handleDelete(value)(event)}
-                      />
-                    )
-                )}
-              </Box>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Controller
+            name='menuName'
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange } }) => (
+              <CustomTextField
+                fullWidth
+                value={value}
+                sx={{ mb: 4 }}
+                label={
+                  <Box>
+                    {t('Menu Name')} <span className='text-red-500 font-bold'>*</span>
+                  </Box>
+                }
+                onChange={onChange}
+                placeholder='Menu Name'
+                error={Boolean(errors.fullName)}
+                {...(errors.fullName && { helperText: errors.fullName.message })}
+              />
             )}
-            MenuProps={MenuProps}
-          >
-            {rolesList?.data?.data?.map(item =>
-              item.isActive ? (
-                <MenuItem
-                  key={item.id}
-                  value={{
-                    roleId: item.id,
-                    roleName: item.name,
-                    description: item.description,
-                    enabled: false
-                  }}
-                  disabled={role.some(role => role.roleId === item.id && role.enabled === true)}
+          />
+          <Controller
+            name='menuURL'
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange } }) => (
+              <CustomTextField
+                fullWidth
+                value={value}
+                sx={{ mb: 4 }}
+                label={
+                  <Box>
+                    {t('Menu URL')} <span className='text-red-500 font-bold'>*</span>
+                  </Box>
+                }
+                onChange={onChange}
+                placeholder={t('Menu URL')}
+                error={Boolean(errors.username)}
+                {...(errors.username && { helperText: errors.username.message })}
+              />
+            )}
+          />
+          <Controller
+            name='apiURL'
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange } }) => (
+              <CustomTextField
+                fullWidth
+                value={value}
+                sx={{ mb: 4 }}
+                label={
+                  <Box>
+                    {t('API URL')} <span className='text-red-500 font-bold'>*</span>
+                  </Box>
+                }
+                onChange={onChange}
+                placeholder='API URL'
+                error={Boolean(errors.email)}
+                {...(errors.email && { helperText: errors.email.message })}
+              />
+            )}
+          />
+          <Controller
+            name='status'
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange } }) => (
+              <Box sx={{ position: 'relative' }}>
+                <CustomTextField
+                  fullWidth
+                  select
+                  value={value}
+                  sx={{ mb: 4 }}
+                  label={t('Status')}
+                  onChange={onChange}
+                  placeholder={t('')}
+                  error={Boolean(errors.status)}
+                  {...(errors.status && { helperText: errors.status.message })}
                 >
-                  {t(item.name)}
-                </MenuItem>
-              ) : null
-            )}
-          </Select>
-        </FormControl>
-
-        {!data?.roles?.some(role => role.roleName.toLowerCase() === 'admin') &&
-          !role.some(role => role.roleName.toLowerCase() === 'admin') && (
-            <Grid item sm={6}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Switch
-                  checked={userData.isActive || false}
-                  onChange={() => setUserData(p => ({ ...p, isActive: !p.isActive }))}
-                  inputProps={{ 'aria-label': 'role-controlled' }}
-                  sx={{
-                    '--Switch-thumbSize': '27px',
-                    '--Switch-trackWidth': '100px',
-                    '--Switch-trackHeight': '45px'
-                  }}
-                />
-                <Typography sx={{ ml: 2 }}>{t('Active')}</Typography>
+                  <MenuItem value='Active'>{t('Active')}</MenuItem>
+                  <MenuItem value='Inactive'>{t('Inactive')}</MenuItem>
+                </CustomTextField>
               </Box>
-            </Grid>
-          )}
-
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Button
-            type='submit'
-            onClick={onSubmit}
-            variant='outlined'
-            sx={{ mr: 3 }}
-            disabled={Boolean(errorMsg) || mutation.isPending || delay}
-          >
-            {mutation.isPending || delay ? t('Loading...') : t('Submit')}
-          </Button>
-          <Button variant='tonal' color='secondary' onClick={toggle}>
-            {t('Cancel')}
-          </Button>
-        </Box>
+            )}
+          />
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Button type='submit' variant='outlined' sx={{ mr: 3 }}>
+              {mutation.isPending ? t('Loading...') : t('Save')}
+            </Button>
+            <Button variant='tonal' color='secondary' onClick={handleClose}>
+              {t('Cancel')}
+            </Button>
+          </Box>
+        </form>
       </Box>
     </Drawer>
   )
