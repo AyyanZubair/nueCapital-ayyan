@@ -67,32 +67,14 @@ const Sub = styled('sub')(({ theme }) => ({
 }))
 
 const data = [
-  {
-    cardCvc: '587',
-    name: 'Tom McBride',
-    expiryDate: '12/24',
-    imgAlt: 'Mastercard',
-    cardNumber: '5577 0000 5577 9865',
-    imgSrc: '/images/logos/mastercard.png'
-  },
-  {
-    cardCvc: '681',
-    imgAlt: 'Visa card',
-    expiryDate: '02/24',
-    badgeColor: 'primary',
-    cardStatus: 'Primary',
-    name: 'Mildred Wagner',
-    cardNumber: '4532 3616 2070 5678',
-    imgSrc: '/images/logos/visa.png'
-  },
-  {
-    cardCvc: '3845',
-    expiryDate: '08/20',
-    name: 'Lester Jennings',
-    imgAlt: 'American Express card',
-    cardNumber: '3700 000000 00002',
-    imgSrc: '/images/logos/american-express.png'
-  }
+  // {
+  //   cardCvc: '587',
+  //   name: 'Ayyan Zubair',
+  //   expiryDate: '12/24',
+  //   imgAlt: 'Mastercard',
+  //   cardNumber: '5577 0000 5577 9865',
+  //   imgSrc: '/images/logos/mastercard.png'
+  // }
 ]
 
 const UserViewBilling = () => {
@@ -182,14 +164,6 @@ const UserViewBilling = () => {
               </Grid>
 
               <Grid item xs={12} md={6} sx={{ mt: [4, 4, 0] }}>
-                <Alert icon={false} severity='warning' sx={{ mb: 4 }}>
-                  <AlertTitle
-                    sx={{ fontWeight: 500, fontSize: '1.125rem', mb: theme => `${theme.spacing(2.5)} !important` }}
-                  >
-                    We need your attention!
-                  </AlertTitle>
-                  Your plan requires updates
-                </Alert>
                 <Box sx={{ display: 'flex', mb: 1.5, justifyContent: 'space-between' }}>
                   <Typography sx={{ fontWeight: 500 }}>Days</Typography>
                   <Typography sx={{ fontWeight: 500 }}>24 of 30 Days</Typography>
@@ -442,7 +416,7 @@ const UserViewBilling = () => {
                           fullWidth
                           label='Card Status'
                           id='user-view-billing-edit-card-status'
-                          defaultValue={data[cardId].cardStatus ? data[cardId].cardStatus : ''}
+                          defaultValue={data[cardId]?.cardStatus ? data[cardId].cardStatus : ''}
                         >
                           <MenuItem value='Primary'>Primary</MenuItem>
                           <MenuItem value='Expired'>Expired</MenuItem>
@@ -503,7 +477,7 @@ const UserViewBilling = () => {
             }
           />
           <CardContent>
-            <Grid container spacing={6}>
+            {/* <Grid container spacing={6}>
               <Grid item xs={12} lg={6}>
                 <TableContainer>
                   <Table size='small' sx={{ width: '95%' }}>
@@ -623,7 +597,7 @@ const UserViewBilling = () => {
                   </Table>
                 </TableContainer>
               </Grid>
-            </Grid>
+            </Grid> */}
           </CardContent>
 
           <Dialog

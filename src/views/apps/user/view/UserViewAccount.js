@@ -18,7 +18,6 @@ import MuiTimeline from '@mui/lab/Timeline'
 import Icon from 'src/@core/components/icon'
 
 // ** Demo Component Imports
-import UsersInvoiceListTable from 'src/views/apps/user/view/UsersInvoiceListTable'
 import UsersProjectListTable from 'src/views/apps/user/view/UsersProjectListTable'
 
 // ** Custom Components Imports
@@ -31,7 +30,7 @@ const Timeline = styled(MuiTimeline)({
   }
 })
 
-const UserViewAccount = ({ invoiceData }) => {
+const UserViewAccount = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
@@ -48,7 +47,7 @@ const UserViewAccount = ({ invoiceData }) => {
               />
             }
           />
-          <CardContent>
+          {/* <CardContent>
             <Timeline>
               <TimelineItem>
                 <TimelineSeparator>
@@ -75,10 +74,10 @@ const UserViewAccount = ({ invoiceData }) => {
                     Project meeting with john @10:15am
                   </Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Avatar alt='Avatar' src='/images/avatars/3.png' sx={{ width: 38, height: 38, mr: 3 }} />
+                    <Avatar alt='Avatar' src='' sx={{ width: 38, height: 38, mr: 3 }} />
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                       <Typography variant='body2' sx={{ fontWeight: 500, color: 'text.primary' }}>
-                        Leona Watkins (Client)
+                        Jehad Alsaweed (Client)
                       </Typography>
                       <Typography variant='caption'>CEO of Infibeam</Typography>
                     </Box>
@@ -173,12 +172,8 @@ const UserViewAccount = ({ invoiceData }) => {
                 </TimelineContent>
               </TimelineItem>
             </Timeline>
-          </CardContent>
+          </CardContent> */}
         </Card>
-      </Grid>
-
-      <Grid item xs={12}>
-        <UsersInvoiceListTable invoiceData={invoiceData} />
       </Grid>
     </Grid>
   )

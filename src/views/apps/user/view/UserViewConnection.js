@@ -15,67 +15,15 @@ import CardContent from '@mui/material/CardContent'
 import Icon from 'src/@core/components/icon'
 
 const connectedAccountsArr = [
-  {
-    checked: true,
-    title: 'Google',
-    logo: '/images/logos/google.png',
-    subtitle: 'Calendar and Contacts'
-  },
-  {
-    checked: false,
-    title: 'Slack',
-    logo: '/images/logos/slack.png',
-    subtitle: 'Communications'
-  },
-  {
-    checked: true,
-    title: 'Github',
-    logo: '/images/logos/github.png',
-    subtitle: 'Manage your Git repositories'
-  },
-  {
-    checked: true,
-    title: 'Mailchimp',
-    subtitle: 'Email marketing service',
-    logo: '/images/logos/mail-chimp.png'
-  },
-  {
-    title: 'Asana',
-    checked: false,
-    subtitle: 'Communication',
-    logo: '/images/logos/asana.png'
-  }
+  // {
+  //   title: 'Asana',
+  //   checked: false,
+  //   subtitle: 'Communication',
+  //   logo: '/images/logos/asana.png'
+  // }
 ]
 
-const socialAccountsArr = [
-  {
-    title: 'Facebook',
-    isConnected: false,
-    logo: '/images/logos/facebook.png'
-  },
-  {
-    title: 'Twitter',
-    isConnected: true,
-    username: '@Pixinvent',
-    logo: '/images/logos/twitter.png'
-  },
-  {
-    title: 'Instagram',
-    isConnected: true,
-    username: '@Pixinvent',
-    logo: '/images/logos/instagram.png'
-  },
-  {
-    title: 'Dribbble',
-    isConnected: false,
-    logo: '/images/logos/dribbble.png'
-  },
-  {
-    title: 'Behance',
-    isConnected: false,
-    logo: '/images/logos/behance.png'
-  }
-]
+const socialAccountsArr = []
 
 const UserViewConnection = () => {
   return (

@@ -14,9 +14,6 @@ import LinearProgress from '@mui/material/LinearProgress'
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
 
-// ** Third Party Imports
-import axios from 'axios'
-
 const Img = styled('img')(({ theme }) => ({
   width: 32,
   height: 32,
@@ -29,7 +26,7 @@ const columns = [
     flex: 0.35,
     minWidth: 250,
     field: 'projectTitle',
-    headerName: 'Project',
+    headerName: 'Projects',
     renderCell: ({ row }) => (
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Img src={row.img} alt={`project-${row.projectTitle}`} />
@@ -46,7 +43,7 @@ const columns = [
     flex: 0.2,
     minWidth: 126,
     field: 'totalTask',
-    headerName: 'Total Tasks',
+    headerName: 'Total Programs',
     renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.totalTask}</Typography>
   },
   {
@@ -65,7 +62,7 @@ const columns = [
     flex: 0.2,
     minWidth: 110,
     field: 'hours',
-    headerName: 'Hours',
+    headerName: 'Funds',
     renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{`${row.hours}h`}</Typography>
   }
 ]
@@ -75,15 +72,6 @@ const InvoiceListTable = () => {
   const [value, setValue] = useState('')
   const [data, setData] = useState([])
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 7 })
-  useEffect(() => {
-    axios
-      .get('/apps/users/project-list', {
-        params: {
-          q: value
-        }
-      })
-      .then(res => setData(res.data))
-  }, [value])
 
   return (
     <Card>
@@ -96,7 +84,7 @@ const InvoiceListTable = () => {
       </CardContent>
       <DataGrid
         autoHeight
-        rows={data}
+        rows={[]}
         rowHeight={60}
         columns={columns}
         disableRowSelectionOnClick

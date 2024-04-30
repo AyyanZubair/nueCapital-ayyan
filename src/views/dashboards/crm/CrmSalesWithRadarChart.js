@@ -9,8 +9,8 @@ import OptionsMenu from 'src/@core/components/option-menu'
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
 const series = [
-  { name: 'Sales', data: [32, 27, 27, 30, 25, 25] },
-  { name: 'Visits', data: [25, 35, 20, 20, 20, 20] }
+  { name: 'Programs', data: [32, 27, 27, 30, 25, 25] },
+  { name: 'Investment', data: [25, 35, 20, 20, 20, 20] }
 ]
 
 const CrmSalesWithRadarChart = () => {
@@ -90,7 +90,7 @@ const CrmSalesWithRadarChart = () => {
   return (
     <Card>
       <CardHeader
-        title='Sales'
+        title='Programs'
         subheader='Last 6 Months'
         action={
           <OptionsMenu

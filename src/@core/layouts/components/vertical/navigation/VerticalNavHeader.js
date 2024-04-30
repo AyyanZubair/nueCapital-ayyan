@@ -77,10 +77,10 @@ const VerticalNavHeader = props => {
         <LinkStyled href='/'>
           <Image
             alt='logo'
-            src={theme.palette.mode === 'dark' ? '/portfolioImages/logo.svg' : '/portfolioImages/logo.svg'}
+            src={theme.palette.mode === 'dark' ? '/logos/logo-white.png' : '/logos/logo.svg'}
             width={70}
             height={70}
-            className='my-5'
+            className={`my-5 ${theme.palette.mode === 'dark' && 'scale-[1.4]'}`}
           />
           {/* <HeaderTitle variant='h4' sx={{ ...menuCollapsedStyles, ...(navCollapsed && !navHover ? {} : { ml: 0 }) }}>
             {themeConfig.templateName}
